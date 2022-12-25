@@ -26,17 +26,17 @@ type Web3ContextType = {
 const Web3Context = createContext<Web3ContextType>({} as Web3ContextType);
 
 const injectedConnector = new InjectedConnector({
-  supportedChainIds: [56, 137, 32520, 1024, 43114, 40, 86, 97, 311, 888, 66]
+  supportedChainIds: [56, 137, 32520, 1024, 43114, 40, 86, 97, 311, 888, 66, 1]
 });
 
 const okxwalletConnector = new OkxWalletConnector({
-  supportedChainIds: [56, 137, 32520, 1024, 43114, 40, 86, 97, 311, 888, 66]
+  supportedChainIds: [56, 137, 32520, 1024, 43114, 40, 86, 97, 311, 888, 66, 1]
 });
 
 const walletConnectConnector = new WalletConnectConnector({
   qrcode: true,
   bridge: 'https://bridge.walletconnect.org',
-  supportedChainIds: [56, 137, 32520, 1024, 43114, 40, 86, 97, 311, 888, 66],
+  supportedChainIds: [56, 137, 32520, 1024, 43114, 40, 86, 97, 311, 888, 66, 1],
   rpc: {
     56: chains[56].rpcUrl,
     32520: chains[32520].rpcUrl,
@@ -44,12 +44,13 @@ const walletConnectConnector = new WalletConnectConnector({
     311: chains[311].rpcUrl,
     97: chains[97].rpcUrl,
     888: chains[888].rpcUrl,
-    66: chains[66].rpcUrl
+    66: chains[66].rpcUrl,
+    1: chains[1].rpcUrl
   }
 });
 
 const torusConnector = new TorusConnector({
-  chainId: 56
+  chainId: 1
 });
 
 export const Web3ContextProvider = ({ children }: any) => {
