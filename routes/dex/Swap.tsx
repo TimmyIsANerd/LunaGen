@@ -485,7 +485,7 @@ export default function Swap() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-center w-full items-center my-2">
+            <div className="flex justify-center w-full items-center my-2 px-2 py-2">
               {!pairError ? (
                 <div className="flex justify-center w-full items-center flex-col gap-2">
                   <div className="flex justify-between w-full items-center font-poppins gap-3">
