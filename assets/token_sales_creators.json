@@ -2,5 +2,9 @@
   "32520": {
     "publicTokenSaleCreator": "0x148b8CF9BdACBBC11E6E4Dea5A18390BAdDA7413",
     "privateTokenSaleCreator": "0xc1679E710B0f725cF44eBf959D25Dcbd3d212589"
+  },
+  "1": {
+    "publicTokenSaleCreator": "0xe88DdB8699E78FbCD6215eBCA61127A7C1627316",
+    "privateTokenSaleCreator": "0x68D81F61b88c2622A590719f956f5Dc253a1dC3d"
   }
 }

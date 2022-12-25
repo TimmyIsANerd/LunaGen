@@ -47,5 +47,12 @@
     "explorer": "https://oklink.com/en/okc",
     "logoURI": "/images/okx.webp",
     "symbol": "OKX"
+  },
+  "1": {
+    "name": "Ethereum",
+    "rpcUrl": "https://eth.llamarpc.com",
+    "explorer": "https://etherscan.io",
+    "logoURI": "/images/ethereum.webp",
+    "symbol": "ETH"
   }
 }
