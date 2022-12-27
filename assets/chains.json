@@ -57,7 +57,7 @@
   },
   "137": {
     "name": "Polygon",
-    "rpcUrl": "https://matic-mainnet.chainstacklabs.com",
+    "rpcUrl": "https://polygon-rpc.com",
     "explorer": "https://polygonscan.com",
     "logoURI": "/images/polygon.webp",
     "symbol": "MATIC"
