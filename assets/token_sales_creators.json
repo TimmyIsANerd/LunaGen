@@ -6,5 +6,9 @@
   "1": {
     "publicTokenSaleCreator": "0xe88DdB8699E78FbCD6215eBCA61127A7C1627316",
     "privateTokenSaleCreator": "0x68D81F61b88c2622A590719f956f5Dc253a1dC3d"
+  },
+  "137": {
+    "publicTokenSaleCreator": "0x276bEdD137969Eb1D375AD9237052D30C24A06CB",
+    "privateTokenSaleCreator": "0x7961c29F9007ADbE089c1C4163a77e453A960583"
   }
 }

@@ -45,7 +45,8 @@ const walletConnectConnector = new WalletConnectConnector({
     97: chains[97].rpcUrl,
     888: chains[888].rpcUrl,
     66: chains[66].rpcUrl,
-    1: chains[1].rpcUrl
+    1: chains[1].rpcUrl,
+    137: chains[137].rpcUrl
   }
 });
 
