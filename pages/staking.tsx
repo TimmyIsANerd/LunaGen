@@ -17,7 +17,7 @@ export default function Staking() {
         <title>Vefi DApps | Stake</title>
       </Head>
       <div className="flex flex-col justify-center md:justify-evenly gap-4 items-start w-full h-full bg-radialed overflow-auto hidden-scrollbar">
-        <div className="flex flex-col justify-evenly gap-1 px-5">
+        <div className="flex flex-col justify-evenly gap-1 px-5 flex-1">
           <span className="text-[#fff] font-Montserrat font-[700] text-[64px]">Staking Pools</span>
           <span className="text-[#fff] font-Montserrat font-[400] text-[20px]">Stake Tokens To Earn Rewards</span>
         </div>
