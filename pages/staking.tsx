@@ -21,7 +21,7 @@ export default function Staking() {
           <span className="text-[#fff] font-Montserrat font-[700] text-[64px]">Staking Pools</span>
           <span className="text-[#fff] font-Montserrat font-[400] text-[20px]">Stake Tokens To Earn Rewards</span>
         </div>
-        <div className="flex max-h-[550px] md:max-h-fit flex-1 border-[#ffeb82] border-t rounded-t-[20px] flex-col gap-3 w-full backdrop-opacity-10 backdrop-invert px-[2px] py-[12px] md:px-[82px] md:py-[44px] justify-start items-center">
+        <div className="flex max-h-[550px] md:max-h-fit border-[#ffeb82] border-t rounded-t-[20px] flex-col gap-3 w-full backdrop-opacity-10 backdrop-invert px-[2px] py-[12px] md:px-[82px] md:py-[44px] justify-start items-center">
           <div className="flex flex-col md:flex-row justify-center items-center w-full gap-4 overflow-auto hidden-scrollbar">
             <div className="flex flex-row justify-center items-center gap-3 text-[#fff] font-Montserrat">
               <button

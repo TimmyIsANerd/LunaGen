@@ -54,5 +54,12 @@
     "explorer": "https://etherscan.io",
     "logoURI": "/images/ethereum.webp",
     "symbol": "ETH"
+  },
+  "137": {
+    "name": "Polygon",
+    "rpcUrl": "https://matic-mainnet.chainstacklabs.com",
+    "explorer": "https://polygonscan.com",
+    "logoURI": "/images/polygon.webp",
+    "symbol": "MATIC"
   }
 }
