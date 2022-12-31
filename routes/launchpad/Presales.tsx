@@ -608,7 +608,7 @@ const CreateSaleRoute = () => {
                 data.proceedsTo,
                 data.admin
               ],
-              { value: parseEther(saleCreationFee.toPrecision(4)).toHexString() }
+              { value: parseEther(saleCreationFee.toString()).toHexString() }
             );
           } else {
             const vesting = _.map(vestingSchedule, (item) => [
@@ -632,7 +632,7 @@ const CreateSaleRoute = () => {
                 data.admin
               ],
               vesting,
-              { value: parseEther(saleCreationFee.toPrecision(4)).toHexString() }
+              { value: parseEther(saleCreationFee.toString()).toHexString() }
             );
           }
 
