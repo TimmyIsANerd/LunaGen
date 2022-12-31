@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Interface } from '@ethersproject/abi';
+import { formatEther } from '@ethersproject/units';
 import { useEffect, useMemo, useState } from 'react';
-import { abi as saleCreatorAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/TokenSaleCreator.sol/TokenSaleCreator.json';
 import chains from '../../assets/chains.json';
 import { useWeb3Context } from '../../contexts/web3';
 import rpcCall from '../../api/rpc';
 
-export const fetchSaleItemInfo = (saleCreator: string, saleId: string, deps: any[] = []) => {
+export const fetchSaleItemInfo = (saleId: string, deps: any[] = []) => {
   const { chainId } = useWeb3Context();
   const chain = useMemo(() => chains[chainId as unknown as keyof typeof chains], [chainId]);
   const [info, setInfo] = useState({
@@ -15,21 +14,18 @@ export const fetchSaleItemInfo = (saleCreator: string, saleId: string, deps: any
   });
 
   useEffect(() => {
-    if (!!saleCreator && !!saleId && chain) {
+    if (!!saleId && chain) {
       (async () => {
         try {
-          const url = chain.rpcUrl;
-          const saleCreatorAbiInterface = new Interface(saleCreatorAbi);
-          const data = saleCreatorAbiInterface.encodeFunctionData('getTotalEtherRaisedForSale(bytes32)', [saleId]);
-          const val = await rpcCall(url, { method: 'eth_call', params: [{ to: saleCreator, data }, 'latest'] });
+          const val = await rpcCall(chain.rpcUrl, { method: 'eth_getBalance', params: [saleId, 'latest'] });
           setInfo({
-            totalEtherRaised: parseInt(val).toString()
+            totalEtherRaised: formatEther(val)
           });
         } catch (error: any) {
           console.log(error);
         }
       })();
     }
-  }, [saleCreator, saleId, chain, ...deps]);
+  }, [saleId, chain, ...deps]);
   return info;
 };
