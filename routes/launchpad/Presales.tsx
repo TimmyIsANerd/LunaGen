@@ -281,7 +281,9 @@ const SelectedSaleItemRoute = ({
                 <div className="flex justify-between items-center w-full border-b border-b-[#fff]/20 px-1 py-1 text-ellipsis">
                   <span className="font-Inter text-white font-[500] text-[16px]">Tokens For Presale</span>
                   <div className="flex flex-col justify-center items-center gap-1 px-1">
-                    <p className="text-white font-Inter font-[500] text-[16px] text-center">{formatUnits(tokensForSale, tk.decimals)}</p>
+                    <p className="text-white font-Inter font-[500] text-[16px] text-center">
+                      {formatUnits(Number(tokensForSale).toLocaleString('fullwide', { useGrouping: false }), tk.decimals)}
+                    </p>
                   </div>
                 </div>
               </>
@@ -290,7 +292,7 @@ const SelectedSaleItemRoute = ({
               <span className="font-Inter text-white font-[500] text-[16px]">Soft Cap</span>
               <div className="flex flex-col justify-center items-center gap-1 px-1">
                 <p className="text-white font-Inter font-[500] text-[16px] text-center">
-                  {formatEther(softCap)} {chain?.symbol}
+                  {formatEther(Number(softCap).toLocaleString('fullwide', { useGrouping: false }))} {chain?.symbol}
                 </p>
               </div>
             </div>
@@ -298,7 +300,7 @@ const SelectedSaleItemRoute = ({
               <span className="font-Inter text-white font-[500] text-[16px]">Hard Cap</span>
               <div className="flex flex-col justify-center items-center gap-1 px-1">
                 <p className="text-white font-Inter font-[500] text-[16px] text-center">
-                  {formatEther(hardCap)} {chain?.symbol}
+                  {formatEther(Number(hardCap).toLocaleString('fullwide', { useGrouping: false }))} {chain?.symbol}
                 </p>
               </div>
             </div>
@@ -335,6 +337,23 @@ const SelectedSaleItemRoute = ({
             />
           </div>
         )}
+        {details?.vestingSchedule && Object.keys(details.vestingSchedule).length > 0 && (
+          <div className="flex flex-col justify-center items-center bg-[#161215] rounded-[31px] gap-4 px-8 py-3 w-full">
+            <div className="border-b border-b-[#fff]/25 py-4 w-full flex justify-center items-center">
+              <span className="text-[#fff] font-MontserratAlt font-[700] text-[25px]">Vesting Schedule</span>
+            </div>
+            <div className="flex flex-col justify-center items-center gap-2 px-8 py-3 w-full">
+              {_.map(Object.keys(details.vestingSchedule), (key, index) => (
+                <div key={index} className="flex justify-between items-center w-full border-b border-b-[#fff]/20 px-1 py-1 text-ellipsis">
+                  <span className="font-Inter text-white font-[500] text-[16px]">{key}</span>
+                  <div className="flex flex-col justify-center items-center gap-1 px-1">
+                    <p className="text-white font-Inter font-[500] text-[16px] text-center">{details?.vestingSchedule![key] as string}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-8 justify-center items-center h-full">
         <div className="flex flex-col bg-[#161215] rounded-[15px] gap-3 px-6 py-2">
@@ -360,16 +379,18 @@ const SelectedSaleItemRoute = ({
                   className="h-full bg-green-400"
                   style={{
                     width: `${
-                      _.multiply(parseInt(totalEtherRaised), 100) / parseInt(hardCap) > 100
+                      _.multiply(parseInt(totalEtherRaised), 100) / Number(hardCap) > 100
                         ? 100
-                        : _.multiply(parseInt(totalEtherRaised), 100) / parseInt(hardCap)
+                        : _.multiply(parseInt(totalEtherRaised), 100) / Number(hardCap)
                     }%`
                   }}
                 />
               </div>
               <div className="flex justify-between text-center pt-[0.099rem] w-full">
                 <span className="text-[#fff] font-bold font-Montserrat">0</span>
-                <span className="text-[#fff] font-bold font-Montserrat">{millify(parseFloat(formatEther(hardCap)), { precision: 4 })}</span>
+                <span className="text-[#fff] font-bold font-Montserrat">
+                  {millify(parseFloat(formatEther(Number(hardCap).toLocaleString('fullwide', { useGrouping: false }))), { precision: 4 })}
+                </span>
               </div>
             </div>
             <div className="flex flex-col justify-center items-center gap-2 w-full border-b border-b-[#fff]/20 py-4">
@@ -409,7 +430,7 @@ const SelectedSaleItemRoute = ({
             <span className="font-Inter text-white font-[500] text-[16px]">Minimum Buy</span>
             <div className="flex flex-col justify-center items-center gap-1 px-1">
               <p className="text-white font-Inter font-[500] text-[16px] text-center">
-                {formatEther(minContribution)} {chain?.symbol}
+                {formatEther(Number(minContribution).toLocaleString('fullwide', { useGrouping: false }))} {chain?.symbol}
               </p>
             </div>
           </div>
@@ -417,7 +438,7 @@ const SelectedSaleItemRoute = ({
             <span className="font-Inter text-white font-[500] text-[16px]">Maximum Buy</span>
             <div className="flex flex-col justify-center items-center gap-1 px-1">
               <p className="text-white font-Inter font-[500] text-[16px] text-center">
-                {formatEther(maxContribution)} {chain?.symbol}
+                {formatEther(Number(maxContribution).toLocaleString('fullwide', { useGrouping: false }))} {chain?.symbol}
               </p>
             </div>
           </div>
@@ -426,7 +447,8 @@ const SelectedSaleItemRoute = ({
               <span className="font-Inter text-white font-[500] text-[16px]">Rate</span>
               <div className="flex flex-col justify-center items-center gap-1 px-1">
                 <p className="text-white font-Inter font-[500] text-[16px] text-center">
-                  1 {chain?.symbol} {'<=>'} {formatUnits(presaleRate, tk.decimals)} {tk.symbol}
+                  1 {chain?.symbol} {'<=>'} {formatUnits(Number(presaleRate).toLocaleString('fullwide', { useGrouping: false }), tk.decimals)}{' '}
+                  {tk.symbol}
                 </p>
               </div>
             </div>
@@ -604,7 +626,7 @@ const CreateSaleRoute = () => {
                 minContribution,
                 maxContribution,
                 startTime,
-                data.daysToLast,
+                `0x${_.multiply(data.daysToLast, 60 * 60 * 24).toString(16)}`,
                 data.proceedsTo,
                 data.admin
               ],
@@ -627,7 +649,7 @@ const CreateSaleRoute = () => {
                 minContribution,
                 maxContribution,
                 startTime,
-                data.daysToLast,
+                `0x${_.multiply(data.daysToLast, 60 * 60 * 24).toString(16)}`,
                 data.proceedsTo,
                 data.admin
               ],
