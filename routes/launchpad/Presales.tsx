@@ -10,11 +10,12 @@ import { Web3Provider } from '@ethersproject/providers';
 import { formatEther, formatUnits, parseEther, parseUnits } from '@ethersproject/units';
 import { Fetcher, Token } from 'quasar-sdk-core';
 import _ from 'lodash';
-import { FiPlus, FiChevronDown, FiArrowLeft, FiArrowRight, FiGlobe, FiTwitter, FiCopy } from 'react-icons/fi';
+import { FiPlus, FiChevronDown, FiArrowLeft, FiArrowRight, FiGlobe, FiTwitter, FiCopy, FiMinus } from 'react-icons/fi';
 import { FaDiscord, FaTelegram } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import { ThreeDots } from 'react-loader-spinner';
-import { abi as saleCreatorAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/TokenSaleCreator.sol/TokenSaleCreator.json';
+import { abi as saleCreatorAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/PublicTokenSaleCreator.sol/PublicTokenSaleCreator.json';
+import { abi as saleAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/interfaces/ITokenSale.sol/ITokenSale.json';
 import { abi as erc20Abi } from 'vefi-token-launchpad-staking/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import millify from 'millify';
 import { TokenSaleItemCard } from '../../components/LaunchPad';
@@ -44,7 +45,7 @@ const AllSalesRoute = ({ onClick, rank = 'all' }: any) => {
         {_.map(
           publicSaleItems.items.filter((model) => (rank === 'all' ? !!model : model.rank === rank)),
           (data, index) => (
-            <TokenSaleItemCard key={index} data={data} saleType="public" onClick={(val) => onClick(val)} />
+            <TokenSaleItemCard key={index} data={data} onClick={(val) => onClick(val)} />
           )
         )}
       </div>
@@ -80,14 +81,13 @@ const SelectedSaleItemRoute = ({
   const { tokensListingAsDictionary } = useAPIContext();
   const { chainId, library, account } = useWeb3Context();
   const chain = useMemo(() => chains[chainId as unknown as keyof typeof chains], [chainId]);
-  const publicSaleCreator = useMemo(() => tokenSaleCreators[chainId as unknown as keyof typeof tokenSaleCreators].publicTokenSaleCreator, [chainId]);
   const [tk, setToken] = useState<Token>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmergencyWithdrawalLoading, setIsEmergencyWithdrawalLoading] = useState<boolean>(false);
   const [isNormalWithdrawalLoading, setIsNormalWithdrawalLoading] = useState<boolean>(false);
   const [isFinalizeSaleLoading, setIsFinalizeSaleLoading] = useState<boolean>(false);
   const [totalSupply, setTotalSupply] = useState<string>('0');
-  const { totalEtherRaised } = fetchSaleItemInfo(publicSaleCreator, id, [isLoading, isEmergencyWithdrawalLoading]);
+  const { totalEtherRaised } = fetchSaleItemInfo(id, [isLoading, isEmergencyWithdrawalLoading]);
   const [amountContributed, setAmountContributed] = useState<string>('0');
   const [expectedBalance, setExpectedBalance] = useState<string>('0');
   const [buyAmount, setBuyAmount] = useState<number>(0);
@@ -97,8 +97,8 @@ const SelectedSaleItemRoute = ({
     try {
       setIsLoading(true);
       const provider = new Web3Provider(library?.givenProvider);
-      const saleContract = new Contract(publicSaleCreator, saleCreatorAbi, provider.getSigner());
-      const contributionTx = await saleContract.contribute(id, { value: parseEther(buyAmount.toPrecision(4)).toHexString() });
+      const saleContract = new Contract(id, saleAbi, provider.getSigner());
+      const contributionTx = await saleContract.contribute({ value: parseEther(buyAmount.toPrecision(4)).toHexString() });
       await contributionTx.wait();
       toast(`Contributed ${buyAmount} ${chain?.symbol}`, { type: 'success' });
       setIsLoading(false);
@@ -106,14 +106,14 @@ const SelectedSaleItemRoute = ({
       setIsLoading(false);
       toast(error.message, { type: 'error' });
     }
-  }, [buyAmount, chain?.symbol, id, library?.givenProvider, publicSaleCreator]);
+  }, [buyAmount, chain?.symbol, id, library?.givenProvider]);
 
   const emergencyWithdrawal = useCallback(async () => {
     try {
       setIsEmergencyWithdrawalLoading(true);
       const provider = new Web3Provider(library?.givenProvider);
-      const saleContract = new Contract(publicSaleCreator, saleCreatorAbi, provider.getSigner());
-      const withdrawalTx = await saleContract.emergencyWithdrawal(id);
+      const saleContract = new Contract(id, saleAbi, provider.getSigner());
+      const withdrawalTx = await saleContract.emergencyWithdraw();
       await withdrawalTx.wait();
       toast('Successfully withdrawn', { type: 'success' });
       setIsEmergencyWithdrawalLoading(false);
@@ -121,14 +121,14 @@ const SelectedSaleItemRoute = ({
       setIsEmergencyWithdrawalLoading(false);
       toast(error.message, { type: 'error' });
     }
-  }, [id, library?.givenProvider, publicSaleCreator]);
+  }, [id, library?.givenProvider]);
 
   const normalWithdrawal = useCallback(async () => {
     try {
       setIsNormalWithdrawalLoading(true);
       const provider = new Web3Provider(library?.givenProvider);
-      const saleContract = new Contract(publicSaleCreator, saleCreatorAbi, provider.getSigner());
-      const withdrawalTx = await saleContract.normalWithdrawal(id);
+      const saleContract = new Contract(id, saleAbi, provider.getSigner());
+      const withdrawalTx = await saleContract.withdraw();
       await withdrawalTx.wait();
       toast('Successfully withdrawn', { type: 'success' });
       setIsNormalWithdrawalLoading(false);
@@ -137,14 +137,14 @@ const SelectedSaleItemRoute = ({
       setIsNormalWithdrawalLoading(false);
       toast(error.message, { type: 'error' });
     }
-  }, [id, library?.givenProvider, publicSaleCreator]);
+  }, [id, library?.givenProvider]);
 
   const finalizeTokenSale = useCallback(async () => {
     try {
       setIsFinalizeSaleLoading(true);
       const provider = new Web3Provider(library?.givenProvider);
-      const saleContract = new Contract(publicSaleCreator, saleCreatorAbi, provider.getSigner());
-      const finalizeTx = await saleContract.finalizeTokenSale(id);
+      const saleContract = new Contract(id, saleAbi, provider.getSigner());
+      const finalizeTx = await saleContract.finalizeSale();
       await finalizeTx.wait();
       toast('Sale finalized', { type: 'success' });
       setIsFinalizeSaleLoading(false);
@@ -152,7 +152,7 @@ const SelectedSaleItemRoute = ({
       setIsFinalizeSaleLoading(false);
       toast(error.message, { type: 'error' });
     }
-  }, [id, library?.givenProvider, publicSaleCreator]);
+  }, [id, library?.givenProvider]);
 
   useEffect(() => {
     if (!!token && !!chain && !!chainId) {
@@ -172,14 +172,14 @@ const SelectedSaleItemRoute = ({
   }, [chain, chainId, token]);
 
   useEffect(() => {
-    if (!!account && !!publicSaleCreator && !!tk) {
+    if (!!account && !!id && !!tk) {
       (async () => {
         try {
-          const saleCreatorAbiInterface = new Interface(saleCreatorAbi);
-          const data = saleCreatorAbiInterface.encodeFunctionData('amountContributed(bytes32,address)', [id, account]);
-          const amount = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: publicSaleCreator, data }, 'latest'] });
-          const data2 = saleCreatorAbiInterface.encodeFunctionData('balance(bytes32,address)', [id, account]);
-          const bal = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: publicSaleCreator, data: data2 }, 'latest'] });
+          const saleAbiInterface = new Interface(saleAbi);
+          const data = saleAbiInterface.encodeFunctionData('amountContributed(address)', [account]);
+          const amount = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: id, data }, 'latest'] });
+          const data2 = saleAbiInterface.encodeFunctionData('balances(address)', [account]);
+          const bal = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: id, data: data2 }, 'latest'] });
           setAmountContributed(formatEther(amount));
           setExpectedBalance(formatUnits(bal, tk?.decimals));
         } catch (error: any) {
@@ -187,7 +187,7 @@ const SelectedSaleItemRoute = ({
         }
       })();
     }
-  }, [account, chain.rpcUrl, id, publicSaleCreator, tk, tk?.decimals, isLoading, isEmergencyWithdrawalLoading, isNormalWithdrawalLoading]);
+  }, [account, chain.rpcUrl, id, tk, tk?.decimals, isLoading, isEmergencyWithdrawalLoading, isNormalWithdrawalLoading]);
 
   return (
     <div className="flex flex-col md:flex-row justify-evenly items-start gap-6">
@@ -485,6 +485,8 @@ const SelectedSaleItemRoute = ({
 
 const CreateSaleRoute = () => {
   const { chainId, library } = useWeb3Context();
+  const [hasVesting, setHasVesting] = useState(false);
+  const [vestingSchedule, setVestingSchedule] = useState([[0, 0, 0, 0]]);
   const [data, setData] = useState({
     token: '',
     tokensForSale: 0,
@@ -514,7 +516,8 @@ const CreateSaleRoute = () => {
       data.maxContribution > 0 &&
       data.minContribution > 0 &&
       data.startTime > 0 &&
-      data.daysToLast > 0,
+      data.daysToLast > 0 &&
+      (hasVesting ? vestingSchedule.length > 0 : true),
     [
       data.admin,
       data.daysToLast,
@@ -525,7 +528,9 @@ const CreateSaleRoute = () => {
       data.proceedsTo,
       data.softCap,
       data.startTime,
-      data.token
+      data.token,
+      hasVesting,
+      vestingSchedule.length
     ]
   );
   const [saleCreationFee, setSaleCreationFee] = useState<number>(0);
@@ -539,6 +544,30 @@ const CreateSaleRoute = () => {
           e.target.type === 'number' || e.target.type === 'datetime-local' || e.target.type === 'date' ? e.target.valueAsNumber || 0 : e.target.value
       })),
     []
+  );
+
+  const addVestingScheduleField = useCallback(() => {
+    setVestingSchedule((v) => [...v, [0, 0, 0, 0]]);
+  }, []);
+
+  const removeVestingScheduleField = useCallback(
+    (index: number) => {
+      const mutableVestingSchedule = [...vestingSchedule];
+      mutableVestingSchedule.splice(index, 1);
+      setVestingSchedule(mutableVestingSchedule);
+    },
+    [vestingSchedule]
+  );
+
+  const handleVestingScheduleFieldChange = useCallback(
+    (vestingScheduleIndex: number, itemIndex: number, value: number) => {
+      const mutableVestingSchedule = [...vestingSchedule];
+      const schedule = mutableVestingSchedule[vestingScheduleIndex];
+      schedule.splice(itemIndex, 1, value);
+      mutableVestingSchedule.splice(vestingScheduleIndex, 1, schedule);
+      setVestingSchedule(mutableVestingSchedule);
+    },
+    [vestingSchedule]
   );
 
   const onSubmit = useCallback(
@@ -562,20 +591,50 @@ const CreateSaleRoute = () => {
           toast('Approved!', { type: 'info' });
 
           const saleCreatorContract = new Contract(publicSaleCreator, saleCreatorAbi, provider.getSigner());
-          const initTx = await saleCreatorContract.initTokenSale(
-            data.token,
-            tokenAmount,
-            hardCap,
-            softCap,
-            presaleRate,
-            minContribution,
-            maxContribution,
-            startTime,
-            data.daysToLast,
-            data.proceedsTo,
-            data.admin,
-            { value: parseEther(saleCreationFee.toPrecision(4)).toHexString() }
-          );
+          let initTx;
+
+          if (!hasVesting) {
+            initTx = await saleCreatorContract.createPresale(
+              [
+                data.token,
+                tokenAmount,
+                softCap,
+                hardCap,
+                presaleRate,
+                minContribution,
+                maxContribution,
+                startTime,
+                data.daysToLast,
+                data.proceedsTo,
+                data.admin
+              ],
+              { value: parseEther(saleCreationFee.toPrecision(4)).toHexString() }
+            );
+          } else {
+            const vesting = _.map(vestingSchedule, (item) => [
+              item[0],
+              `0x${Math.floor(_.divide(item[1], 1000)).toString(16)}`,
+              `0x${Math.floor(_.divide(item[2], 1000)).toString(16)}`,
+              `0x${_.multiply(item[3], 60 * 60 * 24).toString(16)}`
+            ]);
+            initTx = await saleCreatorContract.createPresaleVestable(
+              [
+                data.token,
+                tokenAmount,
+                softCap,
+                hardCap,
+                presaleRate,
+                minContribution,
+                maxContribution,
+                startTime,
+                data.daysToLast,
+                data.proceedsTo,
+                data.admin
+              ],
+              vesting,
+              { value: parseEther(saleCreationFee.toPrecision(4)).toHexString() }
+            );
+          }
 
           await initTx.wait();
           toast('Created successfully', { type: 'success' });
@@ -598,11 +657,13 @@ const CreateSaleRoute = () => {
       data.startTime,
       data.token,
       data.tokensForSale,
+      hasVesting,
       isValidForm,
       library?.givenProvider,
       publicSaleCreator,
       saleCreationFee,
-      tk
+      tk,
+      vestingSchedule
     ]
   );
 
@@ -651,8 +712,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.token}
               />
-
-              <span className="text-info text-[12px] font-poppins">Contract address of the token</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Amount*</label>
@@ -664,7 +723,77 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.tokensForSale}
               />
-              <span className="text-info text-[12px] font-poppins">How much token is available for sale?</span>
+              <div className="flex justify-start items-center gap-2">
+                <input
+                  type="checkbox"
+                  onClick={() => setHasVesting((hv) => !hv)}
+                  checked={hasVesting}
+                  className="checkbox checkbox-accent checkbox-sm"
+                />
+                <span className="text-white text-[12px] font-poppins">Use vesting?</span>
+              </div>
+              {hasVesting && (
+                <div className="flex flex-col gap-2 w-full">
+                  {_.map(vestingSchedule, (item, index) => (
+                    <div key={index} className="flex justify-start items-start gap-2 w-full">
+                      <div className="flex justify-start items-start gap-2 flex-wrap w-full">
+                        <div className="flex flex-col gap-2">
+                          <label className="font-poppins text-white/60">Percentage Released*</label>
+                          <input
+                            type="number"
+                            onChange={(ev) => handleVestingScheduleFieldChange(index, 0, ev.target.valueAsNumber || 0)}
+                            value={item[0]}
+                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <label className="font-poppins text-white/60">Start Time*</label>
+                          <input
+                            placeholder="dd-mm-yyyy"
+                            type="datetime-local"
+                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+                            onChange={(ev) => handleVestingScheduleFieldChange(index, 1, ev.target.valueAsNumber || 0)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <label className="font-poppins text-white/60">End Time*</label>
+                          <input
+                            placeholder="dd-mm-yyyy"
+                            type="datetime-local"
+                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+                            onChange={(ev) => handleVestingScheduleFieldChange(index, 2, ev.target.valueAsNumber || 0)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <label className="font-poppins text-white/60">Release Cycle (Days)*</label>
+                          <input
+                            type="number"
+                            onChange={(ev) => handleVestingScheduleFieldChange(index, 3, ev.target.valueAsNumber || 0)}
+                            value={item[3]}
+                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-center gap-2 items-center">
+                        <button
+                          onClick={() => removeVestingScheduleField(index)}
+                          disabled={vestingSchedule.length === 1}
+                          className="btn btn-warning btn-square"
+                        >
+                          <FiMinus />
+                        </button>
+                        {index === vestingSchedule.length - 1 && (
+                          <button onClick={addVestingScheduleField} className="btn btn-primary btn-square">
+                            <FiPlus />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Soft Cap*</label>
@@ -676,9 +805,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.softCap}
               />
-              <span className="text-info text-[12px] font-poppins">
-                What is the lowest amount raised for this sale to be considered a successful sale?
-              </span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Hard Cap*</label>
@@ -690,9 +816,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.hardCap}
               />
-              <span className="text-info text-[12px] font-poppins">
-                What is the highest amount raised for this sale to be considered a successful sale?
-              </span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Tokens per {chain.symbol} contributed*</label>
@@ -704,7 +827,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.presaleRate}
               />
-              <span className="text-info text-[12px] font-poppins">How many tokens per {chain.symbol}?</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Minimum {chain.symbol} contribution*</label>
@@ -716,7 +838,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.minContribution}
               />
-              <span className="text-info text-[12px] font-poppins">Lowest {chain.symbol} that can be contributed per buyer?</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Maximum {chain.symbol} contribution*</label>
@@ -728,7 +849,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.maxContribution}
               />
-              <span className="text-info text-[12px] font-poppins">Highest {chain.symbol} that can be contributed per buyer?</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Sale start time*</label>
@@ -740,7 +860,6 @@ const CreateSaleRoute = () => {
                 name="startTime"
                 onChange={handleInputChange}
               />
-              <span className="text-info text-[12px] font-poppins">When should this sale start? Must be at least 24 hours.</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Days*</label>
@@ -752,7 +871,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.daysToLast}
               />
-              <span className="text-info text-[12px] font-poppins">How long should this sale last?</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Proceeds to*</label>
@@ -764,8 +882,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.proceedsTo}
               />
-
-              <span className="text-info text-[12px] font-poppins">Address that would receive the proceeds from the sale</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
               <label className="font-poppins text-white/60">Admin*</label>
@@ -777,8 +893,6 @@ const CreateSaleRoute = () => {
                 onChange={handleInputChange}
                 value={data.admin}
               />
-
-              <span className="text-info text-[12px] font-poppins">Address with admin rights over this sale</span>
             </div>
             <div className="flex justify-between items-center w-full">
               <span className="text-white/80 font-Montserrat text-[18px]">Fee</span>

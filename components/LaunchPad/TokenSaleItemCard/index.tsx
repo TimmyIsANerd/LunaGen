@@ -8,12 +8,10 @@ import { TokenSaleItemModel } from '../../../api/models/launchpad';
 import { useAPIContext } from '../../../contexts/api';
 import { useWeb3Context } from '../../../contexts/web3';
 import chains from '../../../assets/chains.json';
-import saleCreators from '../../../assets/token_sales_creators.json';
 import { fetchSaleItemInfo } from '../../../hooks/launchpad';
 
 type ISaleItemCardProps = {
   data: TokenSaleItemModel;
-  saleType: 'public' | 'private';
   onClick: (val: TokenSaleItemModel) => void;
 };
 
@@ -54,7 +52,6 @@ export default function PresaleItemCard({
     admin,
     chainId: chainid
   },
-  saleType,
   onClick
 }: ISaleItemCardProps) {
   const { tokensListingAsDictionary } = useAPIContext();
@@ -62,12 +59,7 @@ export default function PresaleItemCard({
   const [tokenObject, setTokenObject] = useState<Token>();
 
   const chain = useMemo(() => chains[chainId as unknown as keyof typeof chains], [chainId]);
-  const saleCreator = useMemo(
-    () =>
-      saleCreators[chainId as unknown as keyof typeof saleCreators]?.[saleType === 'private' ? 'privateTokenSaleCreator' : 'publicTokenSaleCreator'],
-    [chainId, saleType]
-  );
-  const { totalEtherRaised } = fetchSaleItemInfo(saleCreator, id);
+  const { totalEtherRaised } = fetchSaleItemInfo(id);
 
   useEffect(() => {
     if (!!chainId) {

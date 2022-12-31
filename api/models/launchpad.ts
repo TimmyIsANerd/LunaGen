@@ -25,4 +25,7 @@ export interface TokenSaleItemModel {
     };
     tokenomics?: { [key: string]: number };
   };
+  vestingSchedule?: {
+    [key: string]: string;
+  };
 }
