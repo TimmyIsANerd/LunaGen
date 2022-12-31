@@ -576,12 +576,12 @@ const CreateSaleRoute = () => {
         e.preventDefault();
         if (isValidForm && !!tk) {
           setIsLoading(true);
-          const tokenAmount = parseUnits(data.tokensForSale.toFixed(4), tk.decimals).toHexString();
-          const presaleRate = parseUnits(data.presaleRate.toFixed(4), tk.decimals).toHexString();
-          const hardCap = parseEther(data.hardCap.toFixed(4)).toHexString();
-          const softCap = parseEther(data.softCap.toFixed(4)).toHexString();
-          const minContribution = parseEther(data.minContribution.toFixed(4)).toHexString();
-          const maxContribution = parseEther(data.maxContribution.toFixed(4)).toHexString();
+          const tokenAmount = parseUnits(data.tokensForSale.toString(), tk.decimals).toHexString();
+          const presaleRate = parseUnits(data.presaleRate.toString(), tk.decimals).toHexString();
+          const hardCap = parseEther(data.hardCap.toString()).toHexString();
+          const softCap = parseEther(data.softCap.toString()).toHexString();
+          const minContribution = parseEther(data.minContribution.toString()).toHexString();
+          const maxContribution = parseEther(data.maxContribution.toString()).toHexString();
           const startTime = `0x${_.divide(data.startTime, 1000).toString(16)}`;
 
           const provider = new Web3Provider(library?.givenProvider);
