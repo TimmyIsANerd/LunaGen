@@ -612,7 +612,7 @@ const CreateSaleRoute = () => {
             );
           } else {
             const vesting = _.map(vestingSchedule, (item) => [
-              item[0],
+              Math.ceil(item[0]),
               `0x${Math.floor(_.divide(item[1], 1000)).toString(16)}`,
               `0x${Math.floor(_.divide(item[2], 1000)).toString(16)}`,
               `0x${_.multiply(item[3], 60 * 60 * 24).toString(16)}`
