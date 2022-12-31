@@ -125,22 +125,22 @@ export default function PresaleItemCard({
             <h3 className="flex items-center justify-between text-[1rem] text-[#fff] capitalize font-[700] pb-2 font-Montserrat">
               <span>Max Contribution:</span>
               <span>
-                {millify(parseFloat(formatEther(maxContribution)))} {chain?.symbol}
+                {millify(parseFloat(formatEther(Number(maxContribution).toLocaleString('fullwide', { useGrouping: false }))))} {chain?.symbol}
               </span>
             </h3>
             <h3 className="flex items-center justify-between text-[1rem] text-[#fff] capitalize font-[700] pb-2 font-Montserrat">
               <span>Min Contribution:</span>
               <span>
-                {millify(parseFloat(formatEther(minContribution)))} {chain?.symbol}
+                {millify(parseFloat(formatEther(Number(minContribution).toLocaleString('fullwide', { useGrouping: false }))))} {chain?.symbol}
               </span>
             </h3>
           </div>
           <div className="flex flex-col my-5">
             <span className="text-[#fff] font-Montserrat font-[600] pb-[0.099rem]">
               Progress (
-              {_.multiply(parseInt(totalEtherRaised), 100) / parseInt(hardCap) > 100
+              {_.multiply(parseInt(totalEtherRaised), 100) / Number(hardCap) > 100
                 ? 100
-                : _.multiply(parseInt(totalEtherRaised), 100) / parseInt(hardCap)}
+                : _.multiply(parseInt(totalEtherRaised), 100) / Number(hardCap)}
               %)
             </span>
             <div className="h-[8px] bg-[#1673B9]">
@@ -148,29 +148,33 @@ export default function PresaleItemCard({
                 className="h-full bg-green-400"
                 style={{
                   width: `${
-                    _.multiply(parseInt(totalEtherRaised), 100) / parseInt(hardCap) > 100
+                    _.multiply(parseInt(totalEtherRaised), 100) / Number(hardCap) > 100
                       ? 100
-                      : _.multiply(parseInt(totalEtherRaised), 100) / parseInt(hardCap)
+                      : _.multiply(parseInt(totalEtherRaised), 100) / Number(hardCap)
                   }%`
                 }}
               />
             </div>
             <div className="flex justify-between text-center pt-[0.099rem]">
               <span className="text-[#fff] font-bold font-Montserrat">0</span>
-              <span className="text-[#fff] font-bold font-Montserrat">{millify(parseFloat(formatEther(hardCap)), { precision: 4 })}</span>
+              <span className="text-[#fff] font-bold font-Montserrat">
+                {millify(parseFloat(formatEther(Number(hardCap).toLocaleString('fullwide', { useGrouping: false }))), { precision: 4 })}
+              </span>
             </div>
           </div>
           <div className="flex flex-col">
             <div className="flex justify-between mt-2">
               <span className="text-[#fff] font-bold font-Montserrat">Hard Cap:</span>
               <span className="text-[#fff] font-bold font-Montserrat">
-                {millify(parseFloat(formatEther(hardCap)), { precision: 4 })} {chain?.symbol}
+                {millify(parseFloat(formatEther(Number(hardCap).toLocaleString('fullwide', { useGrouping: false }))), { precision: 4 })}{' '}
+                {chain?.symbol}
               </span>
             </div>
             <div className="flex justify-between  mt-2">
               <span className="text-[#fff] font-bold font-Montserrat">Soft Cap:</span>
               <span className="text-[#fff] font-bold font-Montserrat">
-                {millify(parseFloat(formatEther(softCap)), { precision: 4 })} {chain?.symbol}
+                {millify(parseFloat(formatEther(Number(softCap).toLocaleString('fullwide', { useGrouping: false }))), { precision: 4 })}{' '}
+                {chain?.symbol}
               </span>
             </div>
             <div className="flex justify-between  mt-2">
@@ -178,7 +182,11 @@ export default function PresaleItemCard({
                 {tokenObject?.symbol} per {chain.symbol}:
               </span>
               <span className="text-[#fff] font-bold font-Montserrat">
-                {tokenObject && millify(parseFloat(formatUnits(presaleRate, tokenObject.decimals)), { precision: 4 })} {tokenObject?.symbol}
+                {tokenObject &&
+                  millify(parseFloat(formatUnits(Number(presaleRate).toLocaleString('fullwide', { useGrouping: false }), tokenObject.decimals)), {
+                    precision: 4
+                  })}{' '}
+                {tokenObject?.symbol}
               </span>
             </div>
           </div>

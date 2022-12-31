@@ -24,8 +24,8 @@ export interface TokenSaleItemModel {
       twitter?: string;
     };
     tokenomics?: { [key: string]: number };
-  };
-  vestingSchedule?: {
-    [key: string]: string;
+    vestingSchedule?: {
+      [key: string]: string;
+    };
   };
 }
