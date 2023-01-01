@@ -102,7 +102,7 @@ export default function PresaleItemCard({
           <div className="flex items-center justify-between h-10 w-full">
             <div className="flex">
               <div className="avatar">
-                <div className="w-16 rounded-full">
+                <div className="w-14 rounded-full">
                   <img
                     src={
                       tokensListingAsDictionary[token.toLowerCase()]

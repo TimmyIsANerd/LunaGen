@@ -245,9 +245,13 @@ const SelectedSaleItemRoute = ({
           <div className="flex flex-col w-full gap-3 justify-center items-center py-4">
             <h4 className="font-[700] text-white/10 text-[22px] md:text-[37px] font-MontserratAlt">Project Description</h4>
             {details?.description ? (
-              <p className="text-white font-Inter font-[500] text-[16px] w-full text-center">
-                <span>{`${details.description}`}</span>
-              </p>
+              <>
+                {_.map(details.description.split('\n'), (str, index) => (
+                  <p key={index} className="text-white font-Inter font-[500] text-[16px] w-full text-center">
+                    {str}
+                  </p>
+                ))}
+              </>
             ) : (
               <span className="font-Montserrat font-[600] text-red-500 uppercase text-[28px] md:text-[40px]">No Description</span>
             )}
