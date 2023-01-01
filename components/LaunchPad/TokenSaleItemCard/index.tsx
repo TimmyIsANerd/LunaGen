@@ -101,14 +101,18 @@ export default function PresaleItemCard({
         <div className="w-full flex flex-col ">
           <div className="flex items-center justify-between h-10 w-full">
             <div className="flex">
-              <img
-                src={
-                  tokensListingAsDictionary[token.toLowerCase()]
-                    ? tokensListingAsDictionary[token.toLowerCase()].logoURI
-                    : '/images/placeholder_image.svg'
-                }
-                alt={token}
-              />
+              <div className="avatar">
+                <div className="w-16 rounded-full">
+                  <img
+                    src={
+                      tokensListingAsDictionary[token.toLowerCase()]
+                        ? tokensListingAsDictionary[token.toLowerCase()].logoURI
+                        : '/images/placeholder_image.svg'
+                    }
+                    alt={token}
+                  />
+                </div>
+              </div>
             </div>
             <div className="flex w-2/5 justify-around items-center">
               <span
