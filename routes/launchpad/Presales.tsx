@@ -247,7 +247,7 @@ const SelectedSaleItemRoute = ({
             {details?.description ? (
               <>
                 {_.map(details.description.split('\n'), (str, index) => (
-                  <p key={index} className="text-white font-Inter font-[500] text-[16px] w-full text-center">
+                  <p key={index} className="text-white font-Inter font-[500] text-[16px] w-full text-justify">
                     {str}
                   </p>
                 ))}
