@@ -87,10 +87,12 @@ const SelectedSaleItemRoute = ({
   const [isEmergencyWithdrawalLoading, setIsEmergencyWithdrawalLoading] = useState<boolean>(false);
   const [isNormalWithdrawalLoading, setIsNormalWithdrawalLoading] = useState<boolean>(false);
   const [isFinalizeSaleLoading, setIsFinalizeSaleLoading] = useState<boolean>(false);
+  const [isPauseLoading, setIsPauseLoading] = useState<boolean>(false);
   const [totalSupply, setTotalSupply] = useState<string>('0');
   const { totalEtherRaised } = fetchSaleItemInfo(id, [isLoading, isEmergencyWithdrawalLoading]);
   const [amountContributed, setAmountContributed] = useState<string>('0');
   const [expectedBalance, setExpectedBalance] = useState<string>('0');
+  const [isSalePaused, setIsSalePaused] = useState<boolean>(false);
   const [buyAmount, setBuyAmount] = useState<number>(0);
   const ethBalance = fetchTokenBalanceForConnectedWallet(AddressZero, [isLoading, isEmergencyWithdrawalLoading, isNormalWithdrawalLoading]);
 
@@ -155,6 +157,36 @@ const SelectedSaleItemRoute = ({
     }
   }, [id, library?.givenProvider]);
 
+  const pauseSale = useCallback(async () => {
+    try {
+      setIsPauseLoading(true);
+      const provider = new Web3Provider(library?.givenProvider);
+      const saleContract = new Contract(id, saleAbi, provider.getSigner());
+      const tx = await saleContract.pause();
+      await tx.wait();
+      toast('Sale paused', { type: 'success' });
+      setIsPauseLoading(false);
+    } catch (error: any) {
+      setIsPauseLoading(false);
+      toast(error.message, { type: 'error' });
+    }
+  }, [id, library?.givenProvider]);
+
+  const unpauseSale = useCallback(async () => {
+    try {
+      setIsPauseLoading(true);
+      const provider = new Web3Provider(library?.givenProvider);
+      const saleContract = new Contract(id, saleAbi, provider.getSigner());
+      const tx = await saleContract.unpause();
+      await tx.wait();
+      toast('Sale paused', { type: 'success' });
+      setIsPauseLoading(false);
+    } catch (error: any) {
+      setIsPauseLoading(false);
+      toast(error.message, { type: 'error' });
+    }
+  }, [id, library?.givenProvider]);
+
   useEffect(() => {
     if (!!token && !!chain && !!chainId) {
       (async () => {
@@ -189,6 +221,22 @@ const SelectedSaleItemRoute = ({
       })();
     }
   }, [account, chain.rpcUrl, id, tk, tk?.decimals, isLoading, isEmergencyWithdrawalLoading, isNormalWithdrawalLoading]);
+
+  useEffect(() => {
+    if (!!id) {
+      (async () => {
+        try {
+          const saleAbiInterface = new Interface(saleAbi);
+          const data = saleAbiInterface.getSighash('isPaused()');
+          let truthValue = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: id, data }, 'latest'] });
+          [truthValue] = saleAbiInterface.decodeFunctionResult('isPaused()', truthValue);
+          setIsSalePaused(truthValue);
+        } catch (error: any) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [chain.rpcUrl, id, isPauseLoading]);
 
   return (
     <div className="flex flex-col md:flex-row justify-evenly items-start gap-6">
@@ -497,13 +545,22 @@ const SelectedSaleItemRoute = ({
               </CopyToClipboard>
             </div>
           </div>
-          <button
-            disabled={isFinalizeSaleLoading}
-            onClick={finalizeTokenSale}
-            className={`btn bg-[#000]/60 w-full gap-3 ${isFinalizeSaleLoading ? 'loading' : ''}`}
-          >
-            Finalize Sale
-          </button>
+          <div className="flex justify-center items-center gap-3 w-full">
+            <button
+              disabled={isPauseLoading}
+              onClick={isSalePaused ? unpauseSale : pauseSale}
+              className={`btn bg-[#000]/60 w-1/2 gap-3 ${isPauseLoading ? 'loading' : ''}`}
+            >
+              {isSalePaused ? 'Unpause Sale' : 'Pause Sale'}
+            </button>
+            <button
+              disabled={isFinalizeSaleLoading}
+              onClick={finalizeTokenSale}
+              className={`btn bg-[#000]/60 w-1/2 gap-3 ${isFinalizeSaleLoading ? 'loading' : ''}`}
+            >
+              Finalize Sale
+            </button>
+          </div>
         </div>
       </div>
       <ToastContainer position="top-right" theme="dark" autoClose={5000} />
