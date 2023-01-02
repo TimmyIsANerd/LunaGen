@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import _ from 'lodash';
 import { EventModel, ListingModel } from '../../api/models/dex';
 import { useWeb3Context } from '../web3';
-import { fetchEvents, fetchLiquidityPoolsForUser, fetchListing, fetchTopPairs } from '../../api/dex';
+import { fetchEvents, fetchLiquidityPoolsForUser, fetchListing } from '../../api/dex';
 import { convertListingToDictionary } from '../../api/models/utils';
 import { fetchAccountStakes, fetchAccountStakingPools, fetchStakingPools, fetchSpecialStakingPools } from '../../api/staking';
 import { StakeEventModel } from '../../api/models/staking';
@@ -237,12 +237,9 @@ export const APIContextProvider = ({ children }: any) => {
   useEffect(() => {
     (async () => {
       if (!!account && !!chainId) {
-        const listing = await fetchListing(chainId || 97);
-        const pairs = await fetchTopPairs(chainId || 97);
+        const listing = await fetchListing(chainId || 1);
 
         setTokensListing(listing);
-        setTopPairs(pairs);
-        eventsDataUpdate(1, 'all');
         fetchPools(1);
         fetchAccountPools(1);
         fetchStakesByAccount(1);

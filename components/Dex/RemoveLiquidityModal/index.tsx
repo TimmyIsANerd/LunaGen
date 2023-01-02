@@ -7,7 +7,7 @@ import { Fetcher, WETH } from 'quasar-sdk-core';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { parseEther, parseUnits } from '@ethersproject/units';
-import { abi as routerAbi } from 'quasar-v1-periphery/artifacts/contracts/QuasarRouter.sol/QuasarRouter.json';
+import { abi as routerAbi } from 'quasar-v1-periphery/artifacts/contracts/QuasarRouter02.sol/QuasarRouter02.json';
 import { abi as erc20Abi } from 'quasar-v1-core/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import useSound from 'use-sound';
 import { fetchLiquidityValue } from '../../../hooks/dex';
@@ -78,7 +78,7 @@ export default function RemoveLiquidityModal({
         const [tokenAmount, ethAmount] = firstIsWETH
           ? [parseUnits(token2LiquidityValue.toFixed(6), token1.decimals).toHexString(), parseEther(token1LiquidityValue.toFixed(6)).toHexString()]
           : [parseUnits(token1LiquidityValue.toFixed(6), token0.decimals).toHexString(), parseEther(token2LiquidityValue.toFixed(6)).toHexString()];
-        removeLiquidityTx = await routerContract.removeLiquidityETH(
+        removeLiquidityTx = await routerContract.removeLiquidityETHSupportingFeeOnTransferTokens(
           whichIsntWETH.address,
           parseUnits((_.multiply(value, liquidity) / 100).toFixed(6)).toHexString(),
           tokenAmount,
@@ -244,7 +244,7 @@ export default function RemoveLiquidityModal({
                   <button
                     disabled={value === 0 || token1LiquidityValue === 0 || token2LiquidityValue === 0 || isLoading}
                     onClick={removeLiquidity}
-                    className={`btn btn-primary w-full font-Montserrat ${isLoading ? 'btn-loading' : ''}`}
+                    className={`btn bg-[#1673b9]/50 w-full font-Montserrat ${isLoading ? 'btn-loading' : ''}`}
                   >
                     Remove
                   </button>

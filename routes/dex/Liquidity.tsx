@@ -27,70 +27,72 @@ import { addToMetamask } from '../../utils';
 import successFx from '../../assets/sounds/success_sound.mp3';
 import errorFx from '../../assets/sounds/error_sound.mp3';
 
-enum LiquidityRoutes {
-  ADD_LIQUIDITY,
-  LIQUIDITY_POOLS,
-  FIND_OTHER_LP_TOKENS
+enum Route {
+  ADD_LIQUIDITY = 'add_liquidity',
+  LIQUIDITY_POOLS = 'lps',
+  FIND_OTHER_LP_TOKENS = 'find_other_lps'
 }
 
-const LPRoute = ({ routeChange }: any) => {
+const LPRoute = () => {
   const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
   const { liquidityPoolsForUser, importedPools } = useAPIContext();
   const { chainId } = useWeb3Context();
-  const { reload } = useRouter();
+  const { reload, push } = useRouter();
   return (
-    <div className="bg-[#000000]/50 border-[#ffeb82] border-[1px] rounded-[20px] px-[19px] flex justify-center items-center py-[19px] w-full md:w-1/3 font-Montserrat">
+    <div className="bg-[#000]/[.75] rounded-[15px] shadow-lg flex justify-center items-center w-full md:w-1/3 font-Montserrat">
       <div className="flex flex-col justify-evenly items-center w-full">
-        <div className="flex justify-between items-center border-b-[#4e4e4e]/[.43] border-b-[2px] w-full">
+        <div className="flex justify-between w-full bg-[#161525] rounded-t-[15px] py-6 px-3">
           <div className="flex flex-col justify-start items-start w-8/8">
             <span className="font-[700] text-[25px] text-white">Your Liquidity</span>
             <span className="font-[700] text-[13px] text-white">Remove liquidity to get tokens back</span>
           </div>
           <div className="flex justify-evenly w-1/4">
-            <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[23px]">
+            <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[30px]">
               <FiSettings />
             </button>
-            <button onClick={reload} className="bg-transparent text-white text-[23px]">
+            <button onClick={reload} className="bg-transparent text-white text-[30px]">
               <IoMdRefreshCircle />
             </button>
           </div>
         </div>
-        <div className="mt-[63px] bg-[#0c0b16] rounded-[12px] flex justify-center items-center py-[9px] px-[26px] w-full">
-          <div className="flex justify-center items-center w-full flex-col gap-1 px-1 overflow-auto">
-            {liquidityPoolsForUser.items.length === 0 && importedPools[(chainId as number) || 97]?.length === 0 ? (
-              <span className="text-white">No liquidity found</span>
-            ) : (
-              <ul className="menu w-full bg-[#000]/70 p-2 rounded-box">
-                {_.map(liquidityPoolsForUser.items.concat(importedPools[(chainId as number) || 97]), (lp, index) => (
-                  <UserLPItem pair={lp} key={index} />
-                ))}
-              </ul>
-            )}
-            <span className="text-white">Don&apos;t see a pool you&apos;ve joined?</span>
-            <div className="mt-[36px] w-full">
-              <button
-                onClick={() => routeChange(LiquidityRoutes.FIND_OTHER_LP_TOKENS)}
-                className="border-[#1673b9] border-[2px] rounded-[19px] w-full py-[13px] px-[17px] text-[#1673b9] text-[18px] font-[600] flex justify-center"
-              >
-                <span className="font-MontserratAlt">Find other LP tokens</span>
-              </button>
+        <div className="px-2 py-3 flex flex-col justify-center items-center gap-3 w-full overflow-auto">
+          <div className="bg-[#0c0b16] rounded-[12px] flex justify-center items-center py-[9px] px-[26px] w-full overflow-auto">
+            <div className="flex justify-center items-center w-full flex-col gap-1 px-1 py-1 overflow-auto">
+              {liquidityPoolsForUser.items.length === 0 && importedPools[(chainId as number) || 97]?.length === 0 ? (
+                <span className="text-white">No liquidity found</span>
+              ) : (
+                <ul className="menu w-full bg-[#000]/70 p-2 rounded-box">
+                  {_.map(liquidityPoolsForUser.items.concat(importedPools[(chainId as number) || 97]), (lp, index) => (
+                    <UserLPItem pair={lp} key={index} />
+                  ))}
+                </ul>
+              )}
+              <span className="text-white">Don&apos;t see a pool you&apos;ve joined?</span>
+              <div className="mt-[36px] w-full">
+                <button
+                  onClick={() => push(`/dex?tab=liquidity&child_tab=${Route.FIND_OTHER_LP_TOKENS}`)}
+                  className="border-[#1673b9] border-[2px] rounded-[19px] w-full py-[13px] px-[17px] text-[#1673b9] text-[18px] font-[600] flex justify-center"
+                >
+                  <span className="font-MontserratAlt">Find other LP tokens</span>
+                </button>
+              </div>
             </div>
           </div>
+          <button
+            onClick={() => push(`/dex?tab=liquidity&child_tab=${Route.ADD_LIQUIDITY}`)}
+            className="flex justify-center items-center bg-[#1673b9]/50 py-[14px] px-[62px] rounded-[19px] text-[18px] text-white w-full"
+          >
+            <FiPlus /> <span className="ml-[16px] font-MontserratAlt">Add Liquidity</span>
+          </button>
         </div>
-        <button
-          onClick={() => routeChange(LiquidityRoutes.ADD_LIQUIDITY)}
-          className="flex justify-center items-center bg-[#1673b9] py-[14px] px-[62px] rounded-[19px] text-[18px] text-white w-full mt-[54px]"
-        >
-          <FiPlus /> <span className="ml-[16px] font-MontserratAlt">Add Liquidity</span>
-        </button>
       </div>
       <SwapSettingsModal isOpen={isSettingsModalVisible} onClose={() => setIsSettingsModalVisible(false)} />
     </div>
   );
 };
 
-const AddLiquidityRoute = ({ routeChange }: any) => {
-  const { reload } = useRouter();
+const AddLiquidityRoute = () => {
+  const { reload, back } = useRouter();
   const [val1, setVal1] = useState<number>(0.0);
   const [val2, setVal2] = useState<number>(0.0);
   const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
@@ -249,24 +251,23 @@ const AddLiquidityRoute = ({ routeChange }: any) => {
   // }, [outputAmount2]);
 
   return (
-    <div className="bg-[#000000]/50 border-[#ffeb82] border-[1px] rounded-[20px] px-[19px] flex justify-center items-center py-[19px] w-full md:w-1/3 md:max-h-[600px] font-Montserrat">
-      <div className="flex flex-col justify-evenly items-center w-full">
-        <div className="flex justify-between w-full">
-          <div>
-            <button onClick={() => routeChange(LiquidityRoutes.LIQUIDITY_POOLS)} className="bg-transparent text-white text-[23px]">
-              <IoIosUndo />
-            </button>
-          </div>
-          <div className="flex justify-between items-center">
-            <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[23px]">
+    <div className="bg-[#000]/[.75] rounded-[15px] shadow-lg flex justify-center items-center w-full md:w-1/3 md:max-h-[600px] font-Montserrat">
+      <div className="flex flex-col justify-evenly items-center w-full gap-2">
+        <div className="flex justify-between w-full bg-[#161525] rounded-t-[15px] py-6 px-3">
+          <button onClick={() => back()} className="bg-transparent text-white text-[30px]">
+            <IoIosUndo />
+          </button>
+
+          <div className="flex justify-center items-center gap-2">
+            <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[30px]">
               <FiSettings />
             </button>
-            <button onClick={reload} className="bg-transparent text-white text-[23px] ml-[4px]">
+            <button onClick={reload} className="bg-transparent text-white text-[30px]">
               <IoMdRefreshCircle />
             </button>
           </div>
         </div>
-        <div className="flex flex-col justify-center w-full mt-10 gap-2">
+        <div className="flex flex-col justify-center w-full gap-2 px-[9px]">
           <div className="bg-[#0c0b16] rounded-[12px] flex flex-col w-full px-[23px] py-[9px] justify-evenly gap-2">
             <div className="flex justify-between w-full">
               <span className="text-white">From</span>
@@ -353,21 +354,17 @@ const AddLiquidityRoute = ({ routeChange }: any) => {
             </div>
           </div>
         </div>
-        {!active ? (
-          <button className="flex justify-center items-center bg-[#1673b9] py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full mt-[54px]">
-            <span>Connect Wallet</span>
-          </button>
-        ) : (
+        <div className="flex justify-center items-center w-full px-2 py-2">
           <button
             onClick={addLiquidity}
-            disabled={isLoading}
-            className={`flex justify-center font-Montserrat items-center bg-[#1673b9] btn py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full mt-[54px] ${
+            disabled={isLoading || !active}
+            className={`flex justify-center font-Montserrat items-center bg-[#1673b9]/50 btn py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full ${
               isLoading ? 'loading' : ''
             }`}
           >
-            <span className="font-MontserratAlt">Add Liquidity</span>
+            <span className="font-MontserratAlt">{!active ? 'Wallet not connected' : 'Add Liquidity'}</span>
           </button>
-        )}
+        </div>
       </div>
       <ToastContainer position="top-right" theme="dark" autoClose={5000} />
       <SwapSettingsModal isOpen={isSettingsModalVisible} onClose={() => setIsSettingsModalVisible(false)} />
@@ -387,13 +384,14 @@ const AddLiquidityRoute = ({ routeChange }: any) => {
   );
 };
 
-const FindOtherLPRoute = ({ routeChange }: any) => {
+const FindOtherLPRoute = () => {
   const [firstSelectedToken, setFirstSelectedToken] = useState<ListingModel>({} as ListingModel);
   const [secondSelectedToken, setSecondSelectedToken] = useState<ListingModel>({} as ListingModel);
   const [isImportLoading, setIsImportLoading] = useState<boolean>(false);
   const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
   const [isFirstTokensListModalVisible, setIsFirstTokensListModalVisible] = useState<boolean>(false);
   const [isSecondTokensListModalVisible, setIsSecondTokensListModalVisible] = useState<boolean>(false);
+  const { back } = useRouter();
 
   const { tokensListing, importPool, importedPools } = useAPIContext();
   const { chainId } = useWeb3Context();
@@ -412,11 +410,11 @@ const FindOtherLPRoute = ({ routeChange }: any) => {
     }
   }, [tokensListing]);
   return (
-    <div className="bg-[#000000]/50 border-[#ffeb82] border-[1px] rounded-[20px] flex justify-center items-center py-[19px] w-full md:w-1/3 md:max-h-[600px] font-Montserrat">
+    <div className="bg-[#000]/[.75] rounded-[15px] shadow-lg flex justify-center items-center w-full md:w-1/3 md:max-h-[600px] font-Montserrat">
       <div className="flex flex-col justify-evenly items-center w-full gap-5">
-        <div className="flex justify-between items-center gap-3 w-full border-b-[0.5px] border-[#dcdcdc]/20 px-[10px]">
+        <div className="flex justify-between items-center w-full bg-[#161525] rounded-t-[15px] py-6 px-3">
           <div>
-            <button onClick={() => routeChange(LiquidityRoutes.LIQUIDITY_POOLS)} className="bg-transparent text-white text-[23px]">
+            <button onClick={() => back()} className="bg-transparent text-white text-[30px]">
               <IoIosUndo />
             </button>
           </div>
@@ -424,7 +422,7 @@ const FindOtherLPRoute = ({ routeChange }: any) => {
             <span className="text-white text-[20px] font-Montserrat font-semibold">Import Liquidity Pool</span>
             <span className="text-white text-[14px] font-Montserrat">Import an existing pool</span>
           </div>
-          <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[23px]">
+          <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[30px]">
             <FiSettings />
           </button>
         </div>
@@ -454,14 +452,14 @@ const FindOtherLPRoute = ({ routeChange }: any) => {
             </div>
             <FiChevronDown />
           </button>
-          <div className="flex w-full justify-center items-center">
+          <div className="flex w-full justify-center items-center px-2 py-3">
             {!!pairError ? (
               <span className="text-[red]/50">{pairError.message}</span>
             ) : (
               <button
                 disabled={isImportLoading || _.includes(importedPools[chainId as number], pair)}
                 onClick={addToPools}
-                className={`flex justify-center items-center bg-[#1673b9] btn py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full ${
+                className={`flex justify-center items-center bg-[#1673b9]/50 btn py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full ${
                   isImportLoading ? 'loading' : ''
                 }`}
               >
@@ -488,13 +486,34 @@ const FindOtherLPRoute = ({ routeChange }: any) => {
   );
 };
 
+const useLiqiditySubRoutes = (routes: Route) => {
+  const [component, setComponent] = useState(() => LPRoute);
+
+  useEffect(() => {
+    switch (routes) {
+      case Route.ADD_LIQUIDITY:
+        setComponent(() => AddLiquidityRoute);
+        break;
+      case Route.FIND_OTHER_LP_TOKENS:
+        setComponent(() => FindOtherLPRoute);
+        break;
+      case Route.LIQUIDITY_POOLS:
+        setComponent(() => LPRoute);
+        break;
+      default:
+        setComponent(() => LPRoute);
+        break;
+    }
+  }, [routes]);
+  return component;
+};
+
 export default function Liquidity() {
-  const [route, setRoute] = useState<LiquidityRoutes>(LiquidityRoutes.LIQUIDITY_POOLS);
+  const { query } = useRouter();
+  const RenderedChild = useLiqiditySubRoutes(query.child_tab as Route);
   return (
     <div className="w-full overflow-auto flex justify-center items-center">
-      {route === LiquidityRoutes.LIQUIDITY_POOLS && <LPRoute routeChange={setRoute} />}
-      {route === LiquidityRoutes.ADD_LIQUIDITY && <AddLiquidityRoute routeChange={setRoute} />}
-      {route === LiquidityRoutes.FIND_OTHER_LP_TOKENS && <FindOtherLPRoute routeChange={setRoute} />}
+      <RenderedChild />
     </div>
   );
 }

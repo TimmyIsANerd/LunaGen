@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "export NODE_ENV=production && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint:fix": "npx eslint --fix .",
     "format": "prettier --write **/**.{css,js,json,ts,tsx}"
   },
   "dependencies": {
@@ -70,6 +70,7 @@
     "@types/react-copy-to-clipboard": "^5.0.4",
     "eslint": "7",
     "eslint-config-next": "12.1.6",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "faker": "5.5.3",
     "typescript": "4.6.4"
   }

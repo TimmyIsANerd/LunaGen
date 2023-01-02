@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import StakingPoolCard from '../../components/Staking/StakingPoolCard';
 import { useAPIContext } from '../../contexts/api';
-import Empty from '../../components/Empty';
 
 export default function SpecialStakingPools() {
   const { specialStakingPools, fetchSpecialPools } = useAPIContext();
@@ -16,9 +15,7 @@ export default function SpecialStakingPools() {
   return (
     <div className="flex flex-col gap-2 justify-center items-center w-full flex-1 overflow-auto">
       <div className="flex flex-col md:flex-row justify-start md:justify-center items-center gap-2 flex-wrap w-full flex-1 overflow-auto hidden-scrollbar">
-        {specialStakingPools.totalItems === 0 ? (
-          <Empty />
-        ) : (
+        {specialStakingPools.totalItems > 0 && (
           <>
             {_.map(specialStakingPools.items, (pool, index) => (
               <div className="px-[3px] py-[4px] w-full md:w-1/5 overflow-auto" key={index}>

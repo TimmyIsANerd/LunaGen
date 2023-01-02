@@ -97,12 +97,12 @@ export default function CreateMultiSigWallet() {
   );
   return (
     <div className="flex justify-center items-center mx-auto w-full flex-col md:flex-row px-2 py-2">
-      <div className="card shadow-xl bg-[#000]/50 w-full md:w-1/3">
-        <div className="card-body w-full overflow-auto">
-          <span className="card-title font-Montserrat text-white/75">Create Multi-Signatory Wallet</span>
-          <form onSubmit={submitForm} className="w-full flex flex-col gap-2">
+      <div className="shadow-xl bg-[#000]/50 rounded-[5px] w-full md:w-1/2">
+        <div className="flex flex-col justify-center items-center w-full overflow-auto py-4 px-3 gap-5">
+          <span className="font-Montserrat text-white/75 font-[800] text-[24px] uppercase">Create Multi-Signatory Wallet</span>
+          <form onSubmit={submitForm} className="w-full flex flex-col gap-4">
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Signatories*</label>
+              <label className="font-poppins text-white/60 font-[600]">Signatories*</label>
               {_.map(data.signatories, (signatory, index) => (
                 <div key={index} className="flex justify-center flex-col md:flex-row items-center w-full gap-2">
                   <input
@@ -110,38 +110,34 @@ export default function CreateMultiSigWallet() {
                     value={signatory}
                     name={signatory}
                     onChange={(e) => handleChangeOnSignatoryField(index, e)}
-                    className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                    className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
                   />
                   <div className="flex justify-center gap-2 items-center">
                     <button
                       onClick={() => removeSignatoryField(index)}
                       disabled={data.signatories.length === 1}
-                      className="btn btn-warning btn-square"
+                      className="py-2 px-2 text-[#fff] text-[20px]"
                     >
                       <FiMinus />
                     </button>
                     {index === data.signatories.length - 1 && (
-                      <button onClick={addSignatoryField} className="btn btn-primary btn-square">
+                      <button onClick={addSignatoryField} className="py-2 px-2 text-[#fff] text-[20px]">
                         <FiPlus />
                       </button>
                     )}
                   </div>
                 </div>
               ))}
-              <span className="text-info text-[12px] font-poppins">At least 2 valid Ethereum addresses are required</span>
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Required confirmations*</label>
+              <label className="font-poppins text-white/60 font-[600]">Required confirmations*</label>
               <input
                 placeholder="Set required confirmations for transaction"
                 type="number"
                 value={data.requiredConfirmations}
                 onChange={(e) => setData((d) => ({ ...d, requiredConfirmations: e.target.valueAsNumber || 0 }))}
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
               />
-              <span className="text-info text-[12px] font-poppins">
-                How much confirmation from signatories is required to finalize a transaction?
-              </span>
             </div>
             <div className="flex justify-between items-center w-full">
               <span className="text-white/80 font-Montserrat text-[18px]">Network Fee</span>
@@ -152,7 +148,7 @@ export default function CreateMultiSigWallet() {
             <button
               disabled={!isValidData || isLoading}
               type="submit"
-              className={`bg-[#0cedfc] btn py-[12px] px-[12px] rounded-[10px] w-full ${isLoading ? 'loading' : ''}`}
+              className={`bg-[#1673b9]/50 btn py-[12px] px-[12px] rounded-[10px] w-full ${isLoading ? 'loading' : ''}`}
             >
               <span className="text-[#2b2828] font-[700] text-[15px]">Create Multi-Sig</span>
             </button>
