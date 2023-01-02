@@ -59,7 +59,7 @@
     "url-loader": "^4.1.1",
     "use-sound": "^4.0.1",
     "vefi-multi-sig": "^2.0.0",
-    "vefi-token-launchpad-staking": "^3.0.0",
+    "vefi-token-launchpad-staking": "^3.0.1",
     "web3": "^1.8.0"
   },
   "devDependencies": {
