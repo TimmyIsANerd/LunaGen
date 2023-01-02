@@ -2,8 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FiSettings, FiChevronDown } from 'react-icons/fi';
 import { IoMdRefreshCircle } from 'react-icons/io';
-import { MdSwapVerticalCircle, MdOutlineSwapHoriz } from 'react-icons/md';
-import { Rings } from 'react-loader-spinner';
+import { MdOutlineSwapHoriz, MdArrowDownward } from 'react-icons/md';
 import { ToastContainer, toast } from 'react-toastify';
 import { AddressZero } from '@ethersproject/constants';
 import { Contract } from '@ethersproject/contracts';
@@ -16,22 +15,12 @@ import JSBI from 'jsbi';
 import { abi as erc20Abi } from 'quasar-v1-core/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import { abi as routerAbi } from 'quasar-v1-periphery/artifacts/contracts/QuasarRouter02.sol/QuasarRouter02.json';
 import useSound from 'use-sound';
-import Chart from '../../components/Dex/Chart';
 import SwapSettingsModal from '../../components/Dex/SwapSettingsModal';
-import ChartToggleButton from '../../components/Button/ChartToggleButton';
 import TokensListModal from '../../components/Dex/TokensListModal';
 import { ListingModel } from '../../api/models/dex';
 import { useAPIContext } from '../../contexts/api';
 import { useWeb3Context } from '../../contexts/web3';
-import {
-  computePair,
-  getToken1Price,
-  fetchTokenBalanceForConnectedWallet,
-  fetchChartData,
-  getInputAmount,
-  getOutputAmount,
-  calculatePercentageChange
-} from '../../hooks/dex';
+import { computePair, getToken1Price, fetchTokenBalanceForConnectedWallet, getInputAmount, getOutputAmount } from '../../hooks/dex';
 import routers from '../../assets/routers.json';
 import chains from '../../assets/chains.json';
 import { useDEXSettingsContext } from '../../contexts/dex/settings';
@@ -63,25 +52,12 @@ export default function Swap() {
 
   const { pair, error: pairError } = computePair(firstSelectedToken, secondSelectedToken, chainId || 97);
   const token1Price = getToken1Price(firstSelectedToken, secondSelectedToken, chainId || 97);
-  const [chartPeriodInt, setChartPeriodInt] = useState<number>(60 * 60 * 24);
 
   const balance1 = fetchTokenBalanceForConnectedWallet(firstSelectedToken.address, [isSwapLoading]);
   const balance2 = fetchTokenBalanceForConnectedWallet(secondSelectedToken.address, [isSwapLoading]);
-  const {
-    chartData,
-    loading: chartDataLoading,
-    error: chartError
-  } = fetchChartData(firstSelectedToken, secondSelectedToken, chainId || 97, _.multiply(chartPeriodInt, 1000), [isSwapLoading]);
 
-  const outputAmount = getOutputAmount(firstSelectedToken, secondSelectedToken, val1, chainId || 97);
-  const inputAmount = getInputAmount(firstSelectedToken, secondSelectedToken, val2, chainId || 97);
-
-  const { token0PercentageChange, token1PercentageChange, tokensPercentageChangeType } = calculatePercentageChange(
-    firstSelectedToken,
-    secondSelectedToken,
-    chainId || 97,
-    _.multiply(chartPeriodInt, 1000)
-  );
+  const outputAmount = getOutputAmount(firstSelectedToken, secondSelectedToken, val1, chainId || 1);
+  const inputAmount = getInputAmount(firstSelectedToken, secondSelectedToken, val2, chainId || 1);
 
   const [playSuccess] = useSound(successFx);
   const [playError] = useSound(errorFx);
@@ -274,132 +250,22 @@ export default function Swap() {
 
   return (
     <>
-      <div className="flex flex-col-reverse md:flex-row justify-between w-full gap-3 md:gap-7">
-        {/* Chart view */}
-        <div className="bg-[#000000]/50 border-[#ffeb82] border-[1px] rounded-[20px] px-[19px] pt-[30px] flex justify-center items-center w-full md:w-2/3 overflow-auto md:h-[inherit]">
-          <div className="flex flex-col flex-1 justify-evenly items-center w-full md:w-[757px] h-full">
-            <div className="flex justify-between items-center w-full">
-              <div className="flex justify-between items-center w-1/3">
-                <div className="flex justify-center w-1/2">
-                  <img src={firstSelectedToken.logoURI} alt={firstSelectedToken.name} className="rounded-[50px] w-[30px]" />
-                  <img src={secondSelectedToken.logoURI} alt={secondSelectedToken.name} className="rounded-[50px] h-[30px]" />
-                </div>
-                <div className="flex justify-center">
-                  <span className="text-white text-[16px] font-[700] font-Montserrat">
-                    {firstSelectedToken.symbol}/{secondSelectedToken.symbol}
-                  </span>
-                </div>
-                <div className="flex justify-center">
-                  <button className="bg-transparent text-[white] flex justify-center text-[30px]">
-                    <MdOutlineSwapHoriz />
-                  </button>
-                </div>
-                <div className="flex justify-center">
-                  <button className="bg-[#ffffff]/[.5] text-[#fff] text-[16px] font-[700] py-[7px] px-[12px] border-[#ffeb82] border-[1px] rounded-[5px]">
-                    <span>Basic</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-between items-center w-full mt-[23px]">
-              <div className="flex justify-between items-center md:w-2/5 gap-2">
-                <div className="flex justify-center w-1/3">
-                  <span className="text-white font-[700] text-[16px] md:text-[20px] font-Montserrat">{token1Price}</span>
-                </div>
-                <div className="flex justify-center flex-1">
-                  <span className="text-white text-[16px] font-[700] font-Montserrat">
-                    {firstSelectedToken.symbol}/{secondSelectedToken.symbol}
-                  </span>
-                </div>
-                <div className="flex justify-center w-1/3 flex-1 gap-3">
-                  <span
-                    className={`${
-                      tokensPercentageChangeType.token0PChangeType === 'INCREASE'
-                        ? 'text-green-500'
-                        : tokensPercentageChangeType.token0PChangeType === 'DECREASE'
-                        ? 'text-red-500'
-                        : 'text-yellow-500'
-                    } font-[700] text-[16px] font-Montserrat`}
-                  >
-                    {token0PercentageChange}%
-                  </span>
-                  <span
-                    className={`${
-                      tokensPercentageChangeType.token1PChangeType === 'INCREASE'
-                        ? 'text-green-500'
-                        : tokensPercentageChangeType.token1PChangeType === 'DECREASE'
-                        ? 'text-red-500'
-                        : 'text-yellow-500'
-                    } font-[700] text-[16px] font-Montserrat`}
-                  >
-                    ({token1PercentageChange}%)
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col md:flex-row justify-center bg-[#d9d9d9]/[.1] border-[#d9d9d9] border-[1px] rounded-[18.5px]">
-                <ChartToggleButton
-                  onClick={() => {
-                    setChartPeriod(ChartPeriod.DAY);
-                    setChartPeriodInt(60 * 60 * 24);
-                  }}
-                  isActive={chartPeriod === ChartPeriod.DAY}
-                >
-                  <span>24H</span>
-                </ChartToggleButton>
-                <ChartToggleButton
-                  onClick={() => {
-                    setChartPeriod(ChartPeriod.WEEK);
-                    setChartPeriodInt(60 * 60 * 24 * 7);
-                  }}
-                  isActive={chartPeriod === ChartPeriod.WEEK}
-                >
-                  <span>1W</span>
-                </ChartToggleButton>
-                <ChartToggleButton
-                  onClick={() => {
-                    setChartPeriod(ChartPeriod.MONTH);
-                    setChartPeriodInt(60 * 60 * 24 * 30);
-                  }}
-                  isActive={chartPeriod === ChartPeriod.MONTH}
-                >
-                  <span>1M</span>
-                </ChartToggleButton>
-                <ChartToggleButton
-                  onClick={() => {
-                    setChartPeriod(ChartPeriod.YEAR);
-                    setChartPeriodInt(60 * 60 * 24 * 365);
-                  }}
-                  isActive={chartPeriod === ChartPeriod.YEAR}
-                >
-                  <span>1Y</span>
-                </ChartToggleButton>
-              </div>
-            </div>
-            {chartDataLoading ? (
-              <Rings height={200} width={200} wrapperClass="w-full flex justify-center items-center bg-[#c0c0c0]" color="#5f9ea0" />
-            ) : (
-              <Chart dataset={chartData} />
-            )}
-          </div>
-        </div>
-
-        {/* Form view */}
-        <div className="bg-[#000000]/50 border-[#ffeb82] border-[1px] rounded-[20px] px-[19px] flex justify-center items-center py-[19px] w-full md:w-1/3 md:max-h-[600px] font-Montserrat">
+      <div className="flex justify-center w-full items-center">
+        <div className="bg-[#000]/[.75] rounded-[15px] shadow-lg flex justify-center items-center w-full md:w-1/3 md:max-h-[600px] font-Montserrat">
           <div className="flex flex-col justify-evenly items-center w-full h-full">
-            <div className="flex justify-between w-full">
-              <div>
-                <button onClick={reload} className="bg-transparent text-white text-[23px] cursor-pointer">
+            <div className="flex justify-between w-full bg-[#161525] rounded-t-[15px] py-6 px-3">
+              <span className="font-MontserratAlt text-[20px] text-white font-[600]">Swap</span>
+              <div className="flex justify-center gap-3 items-center">
+                <button onClick={reload} className="bg-transparent text-white text-[30px] cursor-pointer">
                   <IoMdRefreshCircle />
                 </button>
-              </div>
-              <div>
-                <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[23px]">
+                <button onClick={() => setIsSettingsModalVisible(true)} className="bg-transparent text-white text-[30px]">
                   <FiSettings />
                 </button>
               </div>
             </div>
-            <div className="flex flex-col justify-center w-full mt-10 gap-2">
-              <div className="bg-[#0c0b16] rounded-[12px] flex flex-col w-full px-[23px] py-[9px] justify-evenly gap-2">
+            <div className="flex flex-col justify-center w-full mt-10 gap-2 px-[9px]">
+              <div className="bg-[#161525]/[.75] rounded-[12px] flex flex-col w-full px-[23px] py-[9px] justify-evenly gap-2">
                 <div className="flex justify-between w-full">
                   <span className="text-white">From</span>
                   <span className="text-white"> Balance: {balance1}</span>
@@ -440,11 +306,11 @@ export default function Swap() {
                 </div>
               </div>
               <div className="flex justify-center items-center">
-                <button onClick={switchSelectedTokens} className="bg-transparent text-[#ffffff] text-[30px]">
-                  <MdSwapVerticalCircle />
+                <button onClick={switchSelectedTokens} className="bg-transparent text-[#ffffff] text-[23px] rounded-full border border-[#fff]/75">
+                  <MdArrowDownward />
                 </button>
               </div>
-              <div className="bg-[#0c0b16] rounded-[12px] flex flex-col w-full px-[23px] py-[9px] justify-evenly gap-2">
+              <div className="bg-[#161525]/[.75] rounded-[12px] flex flex-col w-full px-[23px] py-[9px] justify-evenly gap-2">
                 <div className="flex justify-between w-full">
                   <span className="text-white">To</span>
                   <span className="text-white"> Balance: {balance2}</span>
@@ -487,7 +353,7 @@ export default function Swap() {
             </div>
             <div className="flex justify-center w-full items-center my-2 px-2 py-2">
               {!pairError ? (
-                <div className="flex justify-center w-full items-center flex-col gap-2">
+                <div className="flex justify-center w-full items-center flex-col gap-2 px-3 py-2">
                   <div className="flex justify-between w-full items-center font-poppins gap-3">
                     <span className="text-white font-[300]">1 {secondSelectedToken.symbol}</span>
                     <MdOutlineSwapHoriz className="text-white font-[400] text-[30px]" />
@@ -509,25 +375,19 @@ export default function Swap() {
                 <span className="text-red-400 font-Montserrat text-[15px]">{pairError.message}</span>
               )}
             </div>
-            {!active ? (
-              <button className="flex justify-center items-center bg-[#1673b9] py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full mt-[54px]">
-                <span>Connect Wallet</span>
+            <div className="flex justify-center gap-2 items-center w-full flex-col px-2 py-4">
+              <button
+                onClick={swapTokens}
+                disabled={!!pairError || isSwapLoading || val1 <= 0 || val1 > parseFloat(balance1) || !active}
+                className={`flex justify-center items-center bg-[#1673b9]/50 btn py-[20px] px-[10px] text-[18px] text-white w-full ${
+                  isSwapLoading ? 'loading' : ''
+                }`}
+              >
+                <span className="font-MontserratAlt">
+                  {!active ? 'Wallet not connected' : val1 > parseFloat(balance1) ? `Insufficient ${firstSelectedToken.symbol} balance` : 'Swap'}
+                </span>
               </button>
-            ) : (
-              <div className="flex justify-center gap-2 items-center w-full flex-col mt-[40px]">
-                <button
-                  onClick={swapTokens}
-                  disabled={!!pairError || isSwapLoading || val1 <= 0 || val1 > parseFloat(balance1)}
-                  className={`flex justify-center items-center bg-[#1673b9] btn py-[14px] px-[10px] rounded-[19px] text-[18px] text-white w-full ${
-                    isSwapLoading ? 'loading' : ''
-                  }`}
-                >
-                  <span className="font-MontserratAlt">
-                    {val1 > parseFloat(balance1) ? `Insufficient ${firstSelectedToken.symbol} balance` : 'Swap'}
-                  </span>
-                </button>
-              </div>
-            )}
+            </div>
           </div>
         </div>
         <ToastContainer position="top-right" theme="dark" autoClose={5000} />

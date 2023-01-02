@@ -10,7 +10,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { formatEther, formatUnits, parseEther, parseUnits } from '@ethersproject/units';
 import { Fetcher, Token } from 'quasar-sdk-core';
 import _ from 'lodash';
-import { FiPlus, FiChevronDown, FiArrowLeft, FiArrowRight, FiGlobe, FiTwitter, FiCopy, FiMinus } from 'react-icons/fi';
+import { FiPlus, FiChevronDown, FiArrowLeft, FiArrowRight, FiGlobe, FiTwitter, FiCopy, FiMinus, FiList } from 'react-icons/fi';
 import { FaDiscord, FaTelegram } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import { ThreeDots } from 'react-loader-spinner';
@@ -18,6 +18,7 @@ import { abi as saleCreatorAbi } from 'vefi-token-launchpad-staking/artifacts/co
 import { abi as saleAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/interfaces/ITokenSale.sol/ITokenSale.json';
 import { abi as erc20Abi } from 'vefi-token-launchpad-staking/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import millify from 'millify';
+import { useRouter } from 'next/router';
 import { TokenSaleItemCard } from '../../components/LaunchPad';
 import { useWeb3Context } from '../../contexts/web3';
 import chains from '../../assets/chains.json';
@@ -28,10 +29,10 @@ import { TokenSaleItemModel } from '../../api/models/launchpad';
 import { fetchSaleItemInfo } from '../../hooks/launchpad';
 import { fetchTokenBalanceForConnectedWallet } from '../../hooks/dex';
 
-enum Subroutes {
-  ALL_ITEMS,
-  SINGLE_ITEM,
-  CREATE_NEW
+enum Routes {
+  ALL_ITEMS = 'all_items',
+  SINGLE_ITEM = 'single_item',
+  CREATE = 'create_new'
 }
 
 const AllSalesRoute = ({ onClick, rank = 'all' }: any) => {
@@ -49,7 +50,7 @@ const AllSalesRoute = ({ onClick, rank = 'all' }: any) => {
           )
         )}
       </div>
-      <div className="flex justify-center items-center gap-2 text-white/70">
+      <div className="flex justify-center items-center gap-2 text-white/70 text-[20px]">
         <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="bg-transparent">
           <FiArrowLeft />
         </button>
@@ -471,14 +472,14 @@ const SelectedSaleItemRoute = ({
             <button
               onClick={normalWithdrawal}
               disabled={isNormalWithdrawalLoading}
-              className={`btn btn-success flex-1 px-1 py-1 ${isNormalWithdrawalLoading ? 'loading' : ''}`}
+              className={`btn bg-[#000]/60 flex-1 px-1 py-1 ${isNormalWithdrawalLoading ? 'loading' : ''}`}
             >
               Harvest Tokens
             </button>
             <button
               onClick={emergencyWithdrawal}
               disabled={isEmergencyWithdrawalLoading}
-              className={`btn btn-warning flex-1 px-1 py-1 ${isEmergencyWithdrawalLoading ? 'loading' : ''}`}
+              className={`btn bg-[#000]/60 flex-1 px-1 py-1 ${isEmergencyWithdrawalLoading ? 'loading' : ''}`}
             >
               Emergency Withdrawal
             </button>
@@ -499,10 +500,9 @@ const SelectedSaleItemRoute = ({
           <button
             disabled={isFinalizeSaleLoading}
             onClick={finalizeTokenSale}
-            className={`btn btn-accent w-full gap-3 ${isFinalizeSaleLoading ? 'loading' : ''}`}
+            className={`btn bg-[#000]/60 w-full gap-3 ${isFinalizeSaleLoading ? 'loading' : ''}`}
           >
             Finalize Sale
-            <div className="badge badge-secondary">admin</div>
           </button>
         </div>
       </div>
@@ -726,27 +726,27 @@ const CreateSaleRoute = () => {
 
   return (
     <div className="flex justify-center items-center mx-auto w-full flex-col md:flex-row px-2 py-2">
-      <div className="card shadow-xl bg-[#000]/50 w-full md:w-1/2">
-        <div className="card-body w-full overflow-auto">
-          <span className="card-title font-Montserrat text-white/75">Create Presale Launch</span>
-          <form onSubmit={onSubmit} className="w-full flex flex-col gap-2">
+      <div className="shadow-xl bg-[#000]/50 rounded-[5px] w-full md:w-1/2">
+        <div className="flex flex-col justify-center items-center w-full overflow-auto py-4 px-3 gap-5">
+          <span className="font-Montserrat text-white/75 font-[800] text-[24px] uppercase">Create Presale Launch</span>
+          <form onSubmit={onSubmit} className="w-full flex flex-col gap-4">
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Token*</label>
+              <label className="font-poppins text-white/60 font-[600]">Token*</label>
               <input
                 placeholder="Token's contract address"
                 type="text"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="token"
                 onChange={handleInputChange}
                 value={data.token}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Amount*</label>
+              <label className="font-poppins text-white/60 font-[600]">Amount*</label>
               <input
                 placeholder="Amount of tokens available for sale"
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="tokensForSale"
                 onChange={handleInputChange}
                 value={data.tokensForSale}
@@ -756,7 +756,7 @@ const CreateSaleRoute = () => {
                   type="checkbox"
                   onClick={() => setHasVesting((hv) => !hv)}
                   checked={hasVesting}
-                  className="checkbox checkbox-accent checkbox-sm"
+                  className="checkbox checkbox-primary checkbox-sm"
                 />
                 <span className="text-white text-[12px] font-poppins">Use vesting?</span>
               </div>
@@ -766,41 +766,41 @@ const CreateSaleRoute = () => {
                     <div key={index} className="flex justify-start items-start gap-2 w-full">
                       <div className="flex justify-start items-start gap-2 flex-wrap w-full">
                         <div className="flex flex-col gap-2">
-                          <label className="font-poppins text-white/60">Percentage Released*</label>
+                          <label className="font-poppins text-white/60 font-[600]">Percentage Released*</label>
                           <input
                             type="number"
                             onChange={(ev) => handleVestingScheduleFieldChange(index, 0, ev.target.valueAsNumber || 0)}
                             value={item[0]}
-                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                            className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                           />
                         </div>
                         <div className="flex flex-col gap-2">
-                          <label className="font-poppins text-white/60">Start Time*</label>
+                          <label className="font-poppins text-white/60 font-[600]">Start Time*</label>
                           <input
                             placeholder="dd-mm-yyyy"
                             type="datetime-local"
-                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                            className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                             pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
                             onChange={(ev) => handleVestingScheduleFieldChange(index, 1, ev.target.valueAsNumber || 0)}
                           />
                         </div>
                         <div className="flex flex-col gap-2">
-                          <label className="font-poppins text-white/60">End Time*</label>
+                          <label className="font-poppins text-white/60 font-[600]">End Time*</label>
                           <input
                             placeholder="dd-mm-yyyy"
                             type="datetime-local"
-                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                            className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                             pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
                             onChange={(ev) => handleVestingScheduleFieldChange(index, 2, ev.target.valueAsNumber || 0)}
                           />
                         </div>
                         <div className="flex flex-col gap-2">
-                          <label className="font-poppins text-white/60">Release Cycle (Days)*</label>
+                          <label className="font-poppins text-white/60 font-[600]">Release Cycle (Days)*</label>
                           <input
                             type="number"
                             onChange={(ev) => handleVestingScheduleFieldChange(index, 3, ev.target.valueAsNumber || 0)}
                             value={item[3]}
-                            className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                            className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                           />
                         </div>
                       </div>
@@ -808,12 +808,12 @@ const CreateSaleRoute = () => {
                         <button
                           onClick={() => removeVestingScheduleField(index)}
                           disabled={vestingSchedule.length === 1}
-                          className="btn btn-warning btn-square"
+                          className="py-2 px-2 text-[#fff] text-[20px]"
                         >
                           <FiMinus />
                         </button>
                         {index === vestingSchedule.length - 1 && (
-                          <button onClick={addVestingScheduleField} className="btn btn-primary btn-square">
+                          <button onClick={addVestingScheduleField} className="py-2 px-2 text-[#fff] text-[20px]">
                             <FiPlus />
                           </button>
                         )}
@@ -824,99 +824,99 @@ const CreateSaleRoute = () => {
               )}
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Soft Cap*</label>
+              <label className="font-poppins text-white/60 font-[600]">Soft Cap*</label>
               <input
                 placeholder="Soft cap"
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="softCap"
                 onChange={handleInputChange}
                 value={data.softCap}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Hard Cap*</label>
+              <label className="font-poppins text-white/60 font-[600]">Hard Cap*</label>
               <input
                 placeholder="Hard cap"
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="hardCap"
                 onChange={handleInputChange}
                 value={data.hardCap}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Tokens per {chain.symbol} contributed*</label>
+              <label className="font-poppins text-white/60 font-[600]">Tokens per {chain.symbol} contributed*</label>
               <input
                 placeholder={`Tokens per ${chain.symbol} contributed`}
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="presaleRate"
                 onChange={handleInputChange}
                 value={data.presaleRate}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Minimum {chain.symbol} contribution*</label>
+              <label className="font-poppins text-white/60 font-[600]">Minimum {chain.symbol} contribution*</label>
               <input
                 placeholder={`Minimum ${chain.symbol} contribution`}
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="minContribution"
                 onChange={handleInputChange}
                 value={data.minContribution}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Maximum {chain.symbol} contribution*</label>
+              <label className="font-poppins text-white/60 font-[600]">Maximum {chain.symbol} contribution*</label>
               <input
                 placeholder={`Maximum ${chain.symbol} contribution`}
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="maxContribution"
                 onChange={handleInputChange}
                 value={data.maxContribution}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Sale start time*</label>
+              <label className="font-poppins text-white/60 font-[600]">Sale start time*</label>
               <input
                 placeholder="dd-mm-yyyy"
                 type="datetime-local"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
                 name="startTime"
                 onChange={handleInputChange}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Days*</label>
+              <label className="font-poppins text-white/60 font-[600]">Days*</label>
               <input
                 placeholder="Days to last"
                 type="number"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="daysToLast"
                 onChange={handleInputChange}
                 value={data.daysToLast}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Proceeds to*</label>
+              <label className="font-poppins text-white/60 font-[600]">Proceeds to*</label>
               <input
                 placeholder="Enter receiver's address"
                 type="text"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="proceedsTo"
                 onChange={handleInputChange}
                 value={data.proceedsTo}
               />
             </div>
             <div className="flex flex-col justify-center gap-2">
-              <label className="font-poppins text-white/60">Admin*</label>
+              <label className="font-poppins text-white/60 font-[600]">Admin*</label>
               <input
                 placeholder="Enter admin's address"
                 type="text"
-                className="outline-0 bg-[#000]/70 py-4 px-4 rounded-[12px] text-white flex-1"
+                className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1"
                 name="admin"
                 onChange={handleInputChange}
                 value={data.admin}
@@ -931,7 +931,7 @@ const CreateSaleRoute = () => {
             <button
               type="submit"
               disabled={!isValidForm || isLoading || !tk}
-              className={`bg-[#0cedfc] btn py-[12px] ${isLoading ? 'loading' : ''} px-[12px] rounded-[10px] w-full`}
+              className={`bg-[#1673b9]/50 btn py-[12px] ${isLoading ? 'loading' : ''} px-[12px] rounded-[10px] w-full`}
             >
               <span className="text-[#2b2828] font-[700] text-[15px]">Create Presale Launch</span>
             </button>
@@ -944,9 +944,39 @@ const CreateSaleRoute = () => {
 };
 
 export default function Presales() {
-  const [selectedRoute, setSelectedRoute] = useState<Subroutes>(Subroutes.ALL_ITEMS);
+  const { query, push } = useRouter();
+  const route = useMemo(() => (query.child_tab as Routes) || Routes.ALL_ITEMS, [query.child_tab]);
   const [selectedSaleItem, setSelectedSaleItem] = useState<TokenSaleItemModel>();
   const [rank, setRank] = useState<'all' | 'silver' | 'bronze' | 'unknown' | 'gold'>('all');
+
+  const RenderedChild = () => {
+    switch (route) {
+      case Routes.ALL_ITEMS:
+        return (
+          <AllSalesRoute
+            rank={rank}
+            onClick={(item: TokenSaleItemModel) => {
+              setSelectedSaleItem(item);
+              push(`/launchpad?tab=presales&child_tab=${Routes.SINGLE_ITEM}`);
+            }}
+          />
+        );
+      case Routes.SINGLE_ITEM:
+        return <SelectedSaleItemRoute {...(selectedSaleItem as TokenSaleItemModel)} />;
+      case Routes.CREATE:
+        return <CreateSaleRoute />;
+      default:
+        return (
+          <AllSalesRoute
+            rank={rank}
+            onClick={(item: TokenSaleItemModel) => {
+              setSelectedSaleItem(item);
+              push(`/launchpad?tab=presales&child_tab=${Routes.SINGLE_ITEM}`);
+            }}
+          />
+        );
+    }
+  };
 
   return (
     <div className="h-full overflow-auto hidden-scrollbar">
@@ -995,29 +1025,28 @@ export default function Presales() {
       </div> */}
       <div className="flex w-full my-8">
         <div className="flex w-full items-center flex-col md:flex-row justify-between py-4 px-3">
-          <div className="flex flex-1 w-full justify-center flex-col md:flex-row gap-2 py-3 px-3">
+          <div className="flex flex-1 w-full justify-center flex-row gap-2 py-3 px-3">
             <button
-              onClick={() => setSelectedRoute(Subroutes.ALL_ITEMS)}
-              className="py-2 px-3 bg-[#ffeb82] rounded-[11px] text-[#000] w-full md:w-1/3"
+              onClick={() => push(`/launchpad?tab=presales&child_tab=${Routes.ALL_ITEMS}`)}
+              className="py-3 px-3 rounded-full border border-white text-[#fff] text-[30px] bg-[#000]/70"
             >
-              <span className="font-[600]">All Presale Items</span>
+              <FiList />
             </button>
             <button
-              onClick={() => setSelectedRoute(Subroutes.CREATE_NEW)}
-              className="flex justify-center py-2 gap-2 px-3 bg-[#ffeb82] items-center rounded-[11px] text-[#000] w-full md:w-1/3"
+              onClick={() => push(`/launchpad?tab=presales&child_tab=${Routes.CREATE}`)}
+              className="py-3 px-3 rounded-full border border-white text-[#fff] text-[30px] bg-[#000]/70"
             >
               <FiPlus />
-              <span className="font-[600]">Create</span>
             </button>
           </div>
-          {selectedRoute === Subroutes.ALL_ITEMS && (
+          {route === Routes.ALL_ITEMS && (
             <div className="flex flex-1 p-5 justify-end">
               <div className="dropdown">
                 <div className="flex flex-col justify-center items-center">
                   <span className="text-[#c7c7c7] font-[600] text-[10px] ml-[-34px] font-Montserrat">Filter By</span>
                   <label
                     tabIndex={0}
-                    className="border-[#1673b9] border-[1px] p-[5px] px-3 flex justify-center items-center rounded-[5px] text-[#fff] text-[11px] bg-transparent m-2"
+                    className="border-[#1673b9] border-[1px] p-3 flex justify-center items-center rounded-[5px] text-[#fff] text-[11px] bg-transparent m-2"
                   >
                     <span className="font-[600] mr-[4px]">All Status</span>
                     <FiChevronDown />
@@ -1045,17 +1074,7 @@ export default function Presales() {
           )}
         </div>
       </div>
-      {selectedRoute === Subroutes.ALL_ITEMS && (
-        <AllSalesRoute
-          rank={rank}
-          onClick={(item: TokenSaleItemModel) => {
-            setSelectedSaleItem(item);
-            setSelectedRoute(Subroutes.SINGLE_ITEM);
-          }}
-        />
-      )}
-      {selectedRoute === Subroutes.CREATE_NEW && <CreateSaleRoute />}
-      {selectedRoute === Subroutes.SINGLE_ITEM && <SelectedSaleItemRoute {...(selectedSaleItem as TokenSaleItemModel)} />}
+      <RenderedChild />
     </div>
   );
 }

@@ -1,23 +1,35 @@
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FiPlus, FiChevronRight, FiKey, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import _ from 'lodash';
 import { formatEthAddress } from 'eth-address';
 import { useAPIContext } from '../contexts/api';
 import { CreateMultiSigWallet, MultiSigItem } from '../routes/multisig';
-import Empty from '../components/Empty';
 
 enum Routes {
-  CREATE_WALLET,
-  IMPORT_WALLET,
-  VIEW_WALLET
+  CREATE_WALLET = 'create_wallet',
+  IMPORT_WALLET = 'import_wallet',
+  VIEW_WALLET = 'view_wallet'
 }
 
 export default function MultiSig() {
+  const { query, push } = useRouter();
   const { multiSigsByAccount, fetchMultiSigsByAccount } = useAPIContext();
-  const [route, setRoute] = useState<Routes>(Routes.CREATE_WALLET);
+  const route = useMemo(() => (query.tab as Routes) || Routes.CREATE_WALLET, [query.tab]);
   const [wallet, setWallet] = useState<string>('');
   const [page, setPage] = useState(1);
+
+  const RenderedChild = () => {
+    switch (route) {
+      case Routes.CREATE_WALLET:
+        return <CreateMultiSigWallet />;
+      case Routes.VIEW_WALLET:
+        return <MultiSigItem wallet={wallet} />;
+      default:
+        return <CreateMultiSigWallet />;
+    }
+  };
 
   useEffect(() => {
     fetchMultiSigsByAccount(page);
@@ -31,7 +43,7 @@ export default function MultiSig() {
       <div className="flex flex-col md:flex-row w-screen backdrop-opacity-10 backdrop-invert bg-[#05325B]/70 h-full overflow-auto hidden-scrollbar">
         <div className="w-full md:w-80 py-10 px-5 md:h-full bg-[#161525] text-white flex flex-col gap-2 md:gap-4">
           <div className="flex justify-center items-center gap-3 w-full">
-            <button onClick={() => setRoute(Routes.CREATE_WALLET)} className="btn btn-ghost flex flex-col gap-2">
+            <button onClick={() => push(`/multisig?tab=${Routes.CREATE_WALLET}`)} className="btn btn-ghost flex flex-col gap-2">
               <FiPlus className="md:text-[20px] text-[16px]" />
               <span className="font-Montserrat">Create</span>
             </button>
@@ -41,16 +53,14 @@ export default function MultiSig() {
           </button> */}
           </div>
           <div className="md:menu flex flex-col justify-center items-center gap-1 w-full px-[2px] md:py-[12px]">
-            {multiSigsByAccount.totalItems === 0 ? (
-              <Empty />
-            ) : (
+            {multiSigsByAccount.totalItems > 0 && (
               <div className="flex justify-center items-center gap-1 w-full md:flex-col">
                 {_.map(multiSigsByAccount.items, (multisig, index) => (
                   <div key={index} className="md:w-full">
                     <button
                       onClick={() => {
                         setWallet(multisig);
-                        setRoute(Routes.VIEW_WALLET);
+                        push(`/multisig?tab=${Routes.VIEW_WALLET}`);
                       }}
                       className={`hidden md:flex justify-center items-center btn font-poppins gap-2 btn-wide ${
                         wallet === multisig && route === Routes.VIEW_WALLET ? 'btn-primary' : 'btn-ghost'
@@ -61,7 +71,7 @@ export default function MultiSig() {
                     <button
                       onClick={() => {
                         setWallet(multisig);
-                        setRoute(Routes.VIEW_WALLET);
+                        push(`/multisig?tab=${Routes.VIEW_WALLET}`);
                       }}
                       className={`md:hidden flex justify-center items-center btn btn-circle ${
                         wallet === multisig && route === Routes.VIEW_WALLET ? 'btn-primary' : ''
@@ -90,8 +100,7 @@ export default function MultiSig() {
             </div>
           </div>
         </div>
-        {route === Routes.CREATE_WALLET && <CreateMultiSigWallet />}
-        {route === Routes.VIEW_WALLET && <MultiSigItem wallet={wallet} />}
+        <RenderedChild />
       </div>
     </>
   );

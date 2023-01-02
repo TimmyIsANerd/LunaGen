@@ -124,10 +124,10 @@ export default function StakeEventsTableBodyItem({ data }: IStakeEventsTableBody
       </div>
       <div className="table-cell text-center">
         <div className="flex justify-center gap-2 items-center">
-          <button onClick={withdrawal} disabled={!poolInfo || isLoading} className={`btn btn-primary ${isLoading ? 'loading' : ''}`}>
+          <button onClick={withdrawal} disabled={!poolInfo || isLoading} className={`btn bg-[#1673b9]/50 ${isLoading ? 'loading' : ''}`}>
             Withdraw
           </button>
-          <button onClick={unstake} disabled={!poolInfo || isLoading} className="btn btn-secondary">
+          <button onClick={unstake} disabled={!poolInfo || isLoading} className="btn bg-[#000]/50">
             Unstake
           </button>
         </div>

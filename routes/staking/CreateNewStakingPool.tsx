@@ -86,84 +86,74 @@ export default function CreateNewStakingPool() {
 
   return (
     <div className="flex justify-center items-center w-full px-2 py-4">
-      <div className="card rounded-[20px] bg-[#000]/50 shadow-xl font-Montserrat overflow-auto hidden-scrollbar w-full md:w-2/6 backdrop-blur-[60px] py-4">
-        <form onSubmit={submitForm} className="card-body w-full font-poppins">
-          <span className="card-title text-white font-[800]">Create New Staking Pool</span>
+      <div className="shadow-xl bg-[#000]/50 rounded-[5px] w-full md:w-1/2">
+        <form onSubmit={submitForm} className="w-full flex flex-col gap-4 justify-center items-center py-4 px-3">
+          <span className="font-Montserrat text-white/75 font-[800] text-[24px] uppercase">Create New Staking Pool</span>
           <div className="flex flex-col w-full justify-start items-start gap-1">
             <span className="text-white font-[500]">Token 1 Address</span>
             <input
               required
-              className="outline-0 w-full bg-[#000]/70 py-4 px-4 rounded-[12px] text-white"
+              className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
               placeholder="Enter the first token address"
               name="token0"
               onChange={handleInputChange}
               type="text"
             />
-            <span className="text-info text-[12px]">The contract address of the first token in this pool.</span>
           </div>
           <div className="flex flex-col w-full justify-start items-start gap-1">
             <span className="text-white font-[500]">Token 2 Address</span>
             <input
               required
-              className="outline-0 w-full bg-[#000]/70 py-4 px-4 rounded-[12px] text-white"
+              className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
               placeholder="Enter the second token address"
               name="token1"
               onChange={handleInputChange}
               type="text"
             />
-            <span className="text-info text-[12px]">The contract address of the second token in this pool.</span>
           </div>
           <div className="flex flex-col w-full justify-start items-start gap-1">
             <span className="text-white font-[500]">Token 1 APY</span>
             <input
               required
               type="number"
-              className="outline-0 w-full bg-[#000]/70 py-4 px-4 rounded-[12px] text-white"
+              className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
               placeholder="Enter the first token APY"
               name="apy1"
               onChange={handleInputChange}
             />
-            <span className="text-info text-[12px]">
-              Percentage of the first token that would be given as a reward annually when the second token is staked.
-            </span>
           </div>
           <div className="flex flex-col w-full justify-start items-start gap-1">
             <span className="text-white font-[500]">Token 2 APY</span>
             <input
               required
               type="number"
-              className="outline-0 w-full bg-[#000]/70 py-4 px-4 rounded-[12px] text-white"
+              className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
               placeholder="Enter the second token APY"
               name="apy2"
               onChange={handleInputChange}
             />
-            <span className="text-info text-[12px]">
-              Percentage of the second token that would be given as a reward annually when the first token is staked.
-            </span>
           </div>
           <div className="flex flex-col w-full justify-start items-start gap-1">
             <span className="text-white font-[500]">Tax</span>
             <input
               required
               type="number"
-              className="outline-0 w-full bg-[#000]/70 py-4 px-4 rounded-[12px] text-white"
+              className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
               placeholder="Enter tax"
               name="tax"
               onChange={handleInputChange}
             />
-            <span className="text-info text-[12px]">Percentage of tokens paid for stake tax</span>
           </div>
           <div className="flex flex-col w-full justify-start items-start gap-1">
-            <span className="text-white font-[500]">Withdrawal Intervals</span>
+            <span className="text-white font-[500]">Withdrawal Intervals (Days)</span>
             <input
               required
               type="number"
-              className="outline-0 w-full bg-[#000]/70 py-4 px-4 rounded-[12px] text-white"
+              className="outline-0 bg-transparent border-b border-white py-4 px-4 text-white flex-1 w-full"
               placeholder="Enter withdrawal intervals"
               name="withdrawalIntervals"
               onChange={handleInputChange}
             />
-            <span className="text-info text-[12px]">Intervals (in days) for withdrawals. Minimum of 30 days</span>
           </div>
           <div className="flex justify-between items-center w-full">
             <span className="font-Montserrat text-white text-[20px] font-[600]">Network Fee</span>
@@ -174,7 +164,7 @@ export default function CreateNewStakingPool() {
           <button
             disabled={!isValidData || isLoading}
             type="submit"
-            className={`bg-[#0cedfc] btn py-[12px] px-[12px] rounded-[10px] w-full ${isLoading ? 'loading' : ''}`}
+            className={`bg-[#1673b9]/50 btn py-[12px] px-[12px] rounded-[10px] w-full ${isLoading ? 'loading' : ''}`}
           >
             <span className="text-[#2b2828] font-[700] text-[15px]">Deploy</span>
           </button>

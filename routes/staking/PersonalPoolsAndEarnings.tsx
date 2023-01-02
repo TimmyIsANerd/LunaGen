@@ -4,7 +4,6 @@ import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import StakingPoolCard from '../../components/Staking/StakingPoolCard';
 import { useAPIContext } from '../../contexts/api';
 import StakeEventsTableBodyItem from '../../components/Staking/StakeEventsTableBodyItem';
-import Empty from '../../components/Empty';
 
 export default function PersonalPoolsAndEarnings() {
   const { accountStakingPools, stakesByAccount, fetchAccountPools, fetchStakesByAccount } = useAPIContext();
@@ -23,9 +22,7 @@ export default function PersonalPoolsAndEarnings() {
     <div className="flex flex-col justify-center items-center gap-8">
       <div className="flex flex-col justify-center items-center w-full gap-2">
         <div className="flex flex-col md:flex-row justify-center items-center gap-3 flex-nowrap md:flex-wrap w-full flex-grow px-[4px]">
-          {accountStakingPools.totalItems === 0 ? (
-            <Empty />
-          ) : (
+          {accountStakingPools.totalItems > 0 && (
             <>
               {_.map(accountStakingPools.items, (pool, index) => (
                 <div className="px-[3px] py-[4px] w-full md:w-1/5" key={index}>

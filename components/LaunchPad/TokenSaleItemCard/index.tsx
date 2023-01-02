@@ -1,5 +1,5 @@
 import { Fetcher, Token } from 'quasar-sdk-core';
-import React, { MouseEventHandler, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Countdown from 'react-countdown';
 import { formatEther, formatUnits } from '@ethersproject/units';
 import _ from 'lodash';
@@ -22,9 +22,9 @@ const Timer = ({ date, completionText }: any) => {
       renderer={({ days, hours, minutes, seconds, completed }) => (
         <>
           {completed ? (
-            <span className="font-Montserrat text-white font-[700] uppercase">{completionText}</span>
+            <span className="font-Montserrat text-white font-[700] uppercase text-[12px]">{completionText}</span>
           ) : (
-            <span className="font-Montserrat text-white font-[700] text-[16px]">
+            <span className="font-Montserrat text-white font-[700] text-[12px]">
               {days} Day(s) : {hours} Hr(s) : {minutes} Min(s) : {seconds} Sec(s)
             </span>
           )}
@@ -96,7 +96,7 @@ export default function PresaleItemCard({
             chainId: chainid
           })
         }
-        className="flex w-80 h-auto bg-[#161525] m-1 p-5 rounded-lg lg:w-85 cursor-pointer"
+        className="flex w-80 h-auto bg-[#161525] m-1 p-5 rounded-lg lg:w-85 cursor-pointer shadow-lg"
       >
         <div className="w-full flex flex-col ">
           <div className="flex items-center justify-between h-10 w-full">

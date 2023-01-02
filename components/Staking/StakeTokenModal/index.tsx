@@ -142,7 +142,7 @@ export default function StakeTokenModal({ token, pool, isOpen, onClose }: IStake
                     <button
                       onClick={initStake}
                       disabled={(!selectedToken && token !== AddressZero) || isStakeLoading || stakingAmount <= 0}
-                      className={`btn bg-[#0cedfc] rounded-[10px] text-[#000] w-full ${isStakeLoading ? 'loading' : ''}`}
+                      className={`btn bg-[#1673b9]/50 rounded-[10px] text-[#000] w-full ${isStakeLoading ? 'loading' : ''}`}
                     >
                       Stake
                     </button>

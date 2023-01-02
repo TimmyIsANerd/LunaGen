@@ -1,7 +1,7 @@
 import { Transition, Dialog } from '@headlessui/react';
 import React, { Fragment, useCallback, useState } from 'react';
 import { FiX } from 'react-icons/fi';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 type IUnstakeModalProps = {
   pool: string;

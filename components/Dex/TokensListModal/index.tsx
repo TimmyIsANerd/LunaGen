@@ -57,7 +57,7 @@ export default function TokensListModal({ onClose, isVisible, onTokenSelected, s
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="container top-0 bottom-0 left-0 right-0 w-[400px] mx-auto bg-[#161525]/[.7] mix-blend-normal rounded-[25px] backdrop-blur-[64px] text-white">
+              <div className="container top-0 bottom-0 left-0 right-0 w-[400px] mx-auto bg-[#161525]/[.7] mix-blend-normal rounded-[10px] backdrop-blur-[64px] text-white">
                 <div className="flex flex-col justify-center items-center w-full">
                   <div className="bg-[#161525]/[.5] p-[30px] w-full">
                     <div className="flex flex-row">

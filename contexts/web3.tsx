@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, createContext, useContext, useEffect, useCallback } from 'react';
+import React, { useState, createContext, useContext, useEffect, useCallback, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
@@ -55,8 +55,9 @@ const torusConnector = new TorusConnector({
 });
 
 export const Web3ContextProvider = ({ children }: any) => {
-  const { library, account, activate, deactivate, active, chainId, error, setError } = useWeb3React<Web3>();
+  const { library, account, activate, deactivate, active, chainId: web3ChainId, error, setError } = useWeb3React<Web3>();
   const [balance, setBalance] = useState<string>('0');
+  const chainId = useMemo(() => web3ChainId || 1, [web3ChainId]);
 
   const fetchBalance = useCallback(() => {
     if (!!account) {

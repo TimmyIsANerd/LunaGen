@@ -40,7 +40,7 @@ export default function UserLPItem({ pair }: any) {
           {lpDetails.token0Symbol}/{lpDetails.token1Symbol}
         </span>
         <span className="text-white font-poppins md:font-[16px] font-[12px]">{lpDetails.accountBalance.toPrecision(2)}</span>
-        <button onClick={() => setRemoveLiquidityModalVisible(true)} className="btn btn-square bg-red-500">
+        <button onClick={() => setRemoveLiquidityModalVisible(true)} className="btn btn-square">
           {' '}
           <FiTrash2 className="text-white" />{' '}
         </button>

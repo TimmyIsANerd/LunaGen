@@ -72,8 +72,8 @@ export default function Header() {
           </div>
         </div>
       )}
-      <div className="bg-gradient-to-r from-[#000000] to-[#161525] w-full font-Montserrat">
-        <div className="flex flex-row justify-between px-[38px] py-[16px]">
+      <div className="bg-[#000]/50 w-full font-Montserrat">
+        <div className="flex flex-row justify-between px-[38px] py-[16px] items-center">
           <div className="flex justify-center cursor-pointer">
             <Link href="/">
               <Image src="/images/vefi.svg" alt="vefi_logo" width={30} height={30} />
@@ -81,28 +81,28 @@ export default function Header() {
           </div>
           <div className="md:flex flex-row justify-between hidden">
             <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="border-b-[3px] border-b-[#46aefc]" href="/dex">
-                <span className="text-white text-[21px] font-[600]">Trade</span>
+              <ActiveLink activeClassName="font-[800]" href="/dex">
+                <span className="text-white text-[21px] font-[400]">Trade</span>
               </ActiveLink>
             </div>
             <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="border-b-[3px] border-b-[#46aefc]" href="/launchpad">
-                <span className="text-white text-[21px] font-[600]">Launchpad</span>
+              <ActiveLink activeClassName="font-[800]" href="/launchpad">
+                <span className="text-white text-[21px] font-[400]">Launchpad</span>
               </ActiveLink>
             </div>
             <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="border-b-[3px] border-b-[#46aefc]" href="/staking">
-                <span className="text-white text-[21px] font-[600]">Staking Pools</span>
+              <ActiveLink activeClassName="font-[800]" href="/staking">
+                <span className="text-white text-[21px] font-[400]">Staking Pools</span>
               </ActiveLink>
             </div>
             <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="border-b-[3px] border-b-[#46aefc]" href="/multisig">
-                <span className="text-white text-[21px] font-[600]">Multi-Signature</span>
+              <ActiveLink activeClassName="font-[800]" href="/multisig">
+                <span className="text-white text-[21px] font-[400]">Multi-Signature</span>
               </ActiveLink>
             </div>
             <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="border-b-[3px] border-b-[#46aefc]" href="/bridge">
-                <span className="text-white text-[21px] font-[600]">Bridge</span>
+              <ActiveLink activeClassName="font-[800]" href="/bridge">
+                <span className="text-white text-[21px] font-[400]">Bridge</span>
               </ActiveLink>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function Header() {
             {!active ? (
               <button
                 onClick={() => setShowProviderModal(true)}
-                className="hidden md:flex justify-center items-center bg-[#1673b9] py-[9px] px-[10px] rounded-[11px] text-[18px] text-white"
+                className="hidden md:flex justify-center items-center bg-[#1673b9]/30 py-[9px] px-[10px] rounded-[11px] text-[18px] text-white"
               >
                 <FaWallet /> <span className="text-white text-[18px] ml-[2px]">Connect Wallet</span>
               </button>
@@ -128,7 +128,7 @@ export default function Header() {
                     </div>
                     <span className="text-white text-[18px] ml-[2px]">{selectedChain.name}</span> <FiChevronDown />
                   </button>
-                  <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.85] rounded-box w-full text-white">
+                  <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.5] w-80 rounded-box text-white">
                     {_.map(Object.keys(chains), (key, index) => (
                       <li key={index}>
                         <a className="gap-2" onClick={() => switchChain(hexValue(parseInt(key)), chains)}>
@@ -146,7 +146,7 @@ export default function Header() {
                 <div className="dropdown dropdown-hover">
                   <button
                     tabIndex={0}
-                    className="hidden md:flex justify-center items-center bg-[#1673b9] py-[9px] px-[10px] rounded-[25px] text-[18px] text-white gap-2"
+                    className="hidden md:flex justify-center items-center bg-[#1673b9]/30 py-[9px] px-[10px] rounded-[25px] text-[18px] text-white gap-2"
                   >
                     <div className="h-[30px] w-[30px] rounded-[25px] flex justify-center items-center border border-white">
                       <FaWallet />
