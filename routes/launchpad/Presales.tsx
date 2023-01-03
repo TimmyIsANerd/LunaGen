@@ -689,7 +689,7 @@ const CreateSaleRoute = () => {
                 minContribution,
                 maxContribution,
                 startTime,
-                `0x${_.multiply(data.daysToLast, 60 * 60 * 24).toString(16)}`,
+                data.daysToLast,
                 data.proceedsTo,
                 data.admin
               ],
@@ -712,7 +712,7 @@ const CreateSaleRoute = () => {
                 minContribution,
                 maxContribution,
                 startTime,
-                `0x${_.multiply(data.daysToLast, 60 * 60 * 24).toString(16)}`,
+                data.daysToLast,
                 data.proceedsTo,
                 data.admin
               ],
