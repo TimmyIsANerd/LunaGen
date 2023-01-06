@@ -15,7 +15,7 @@ import { FaDiscord, FaTelegram } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import { ThreeDots } from 'react-loader-spinner';
 import { abi as saleCreatorAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/PublicTokenSaleCreator.sol/PublicTokenSaleCreator.json';
-import { abi as saleAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/interfaces/ITokenSale.sol/ITokenSale.json';
+import { abi as saleAbi } from 'vefi-token-launchpad-staking/artifacts/contracts/Presale.sol/Presale.json';
 import { abi as erc20Abi } from 'vefi-token-launchpad-staking/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import millify from 'millify';
 import { useRouter } from 'next/router';

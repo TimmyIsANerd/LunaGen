@@ -33,6 +33,8 @@
     "chart.js": "^3.9.1",
     "daisyui": "^2.25.0",
     "eth-address": "^1.0.1",
+    "graphql": "^16.6.0",
+    "graphql-request": "^5.1.0",
     "jsbi": "^4.3.0",
     "lodash": "^4.17.21",
     "millify": "^5.0.1",
