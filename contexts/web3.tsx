@@ -12,7 +12,7 @@ import chains from '../assets/chains.json';
 type Web3ContextType = {
   account?: string | null;
   library?: Web3;
-  chainId?: number;
+  chainId: number;
   active: boolean;
   error?: Error;
   balance?: string;
@@ -57,7 +57,7 @@ const torusConnector = new TorusConnector({
 export const Web3ContextProvider = ({ children }: any) => {
   const { library, account, activate, deactivate, active, chainId: web3ChainId, error, setError } = useWeb3React<Web3>();
   const [balance, setBalance] = useState<string>('0');
-  const chainId = useMemo(() => web3ChainId || 1, [web3ChainId]);
+  const chainId = useMemo(() => web3ChainId || 32520, [web3ChainId]);
 
   const fetchBalance = useCallback(() => {
     if (!!account) {

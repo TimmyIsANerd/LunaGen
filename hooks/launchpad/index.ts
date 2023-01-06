@@ -5,6 +5,46 @@ import { useEffect, useMemo, useState } from 'react';
 import chains from '../../assets/chains.json';
 import { useWeb3Context } from '../../contexts/web3';
 import rpcCall from '../../api/rpc';
+import rq from '../subgraph-root';
+
+export const usePublicTokenSalesList = (page: number = 1) => {
+  const [items, setItems] = useState<Array<any>>([]);
+  const { chainId } = useWeb3Context();
+
+  useEffect(() => {
+    rq(
+      chainId,
+      'vefi/public-token-sale',
+      `
+      {
+        tokenSaleItems(first: 10, skip: ${(page - 1) * 10}) {
+          maxContributionEther,
+          minContributionEther,
+          hardcap,
+          softcap,
+          id,
+          tokensForSale,
+          tokensPerEther,
+          token,
+          saleStartTime,
+          saleEndTime
+        }
+      }
+    `
+    )
+      .then((res) =>
+        setItems(
+          res.data.tokenSaleItems.map((item: any) => ({
+            ...item,
+            saleStartTime: parseInt(item.saleStartTime) * 1000,
+            saleEndTime: parseInt(item.saleEndTime) * 1000
+          }))
+        )
+      )
+      .catch(console.log);
+  }, [page]);
+  return items;
+};
 
 export const fetchSaleItemInfo = (saleId: string, deps: any[] = []) => {
   const { chainId } = useWeb3Context();
