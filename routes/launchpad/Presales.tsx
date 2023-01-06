@@ -89,6 +89,7 @@ const SelectedSaleItemRoute = ({
   const [isFinalizeSaleLoading, setIsFinalizeSaleLoading] = useState<boolean>(false);
   const [isPauseLoading, setIsPauseLoading] = useState<boolean>(false);
   const [totalSupply, setTotalSupply] = useState<string>('0');
+  const [isSaleEnded, setIsSaleEnded] = useState<boolean>(false);
   const { totalEtherRaised } = fetchSaleItemInfo(id, [isLoading, isEmergencyWithdrawalLoading]);
   const [amountContributed, setAmountContributed] = useState<string>('0');
   const [expectedBalance, setExpectedBalance] = useState<string>('0');
@@ -228,9 +229,13 @@ const SelectedSaleItemRoute = ({
         try {
           const saleAbiInterface = new Interface(saleAbi);
           const data = saleAbiInterface.getSighash('isPaused()');
+          const data2 = saleAbiInterface.getSighash('isSaleEnded()');
           let truthValue = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: id, data }, 'latest'] });
+          let truthValue2 = await rpcCall(chain.rpcUrl, { method: 'eth_call', params: [{ to: id, data: data2 }, 'latest'] });
           [truthValue] = saleAbiInterface.decodeFunctionResult('isPaused()', truthValue);
+          [truthValue2] = saleAbiInterface.decodeFunctionResult('isSaleEnded()', truthValue2);
           setIsSalePaused(truthValue);
+          setIsSaleEnded(truthValue2);
         } catch (error: any) {
           console.log(error);
         }
@@ -517,13 +522,15 @@ const SelectedSaleItemRoute = ({
             </div>
           </div>
           <div className="flex justify-center items-center w-full gap-3 py-4">
-            <button
-              onClick={normalWithdrawal}
-              disabled={isNormalWithdrawalLoading}
-              className={`btn bg-[#000]/60 flex-1 px-1 py-1 ${isNormalWithdrawalLoading ? 'loading' : ''}`}
-            >
-              Harvest Tokens
-            </button>
+            {isSaleEnded && (
+              <button
+                onClick={normalWithdrawal}
+                disabled={isNormalWithdrawalLoading}
+                className={`btn bg-[#000]/60 flex-1 px-1 py-1 ${isNormalWithdrawalLoading ? 'loading' : ''}`}
+              >
+                Harvest Tokens
+              </button>
+            )}
             <button
               onClick={emergencyWithdrawal}
               disabled={isEmergencyWithdrawalLoading}
