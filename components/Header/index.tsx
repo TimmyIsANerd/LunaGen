@@ -62,6 +62,16 @@ export default function Header() {
   const [showProviderModal, setShowProviderModal] = useState<boolean>(false);
   const { active, account, error: web3Error, disconnectWallet, chainId } = useWeb3Context();
   const selectedChain = useMemo(() => chains[(chainId as unknown as keyof typeof chains) || 97], [chainId]);
+
+  function HeaderLogo() {
+    return (
+      <div className="flex flex-row justify-center items-center">
+        <Image src="/images/lunagen.svg" alt="vefi_logo" width={30} height={30} />
+        <p className='font-extrabold text-white text-[0.7rem] md:text-[1.5rem]'>LunaGens DeFi Staking</p>
+      </div>
+    )
+  }
+
   return (
     <>
       {web3Error && (
@@ -72,109 +82,96 @@ export default function Header() {
           </div>
         </div>
       )}
-      <div className="bg-[#000]/50 w-full font-Montserrat">
+      <div className="w-full font-Montserrat bg-transparent shadow-lg">
         <div className="flex flex-row justify-between px-[38px] py-[16px] items-center">
           <div className="flex justify-center cursor-pointer">
             <Link href="/">
-              <Image src="/images/vefi.svg" alt="vefi_logo" width={30} height={30} />
+              <HeaderLogo />
             </Link>
           </div>
-          <div className="md:flex flex-row justify-between hidden">
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800]" href="/dex">
-                <span className="text-white text-[21px] font-[400]">Trade</span>
-              </ActiveLink>
+          <div className='flex flex-row items-center'>
+            <div className="md:flex flex-row justify-between hidden">
+              <div className="px-[23px] cursor-pointer">
+                <Link className="font-[800]" href="https://pancakeswap.finance/swap?outputCurrency=0x28B9aed756De31B6b362aA0f23211D13093EBb79" target='_blank'>
+                  <span className="text-white text-[21px] font-[400]">Swap</span>
+                </Link>
+              </div>
+              <div className="px-[23px] cursor-pointer">
+                <ActiveLink activeClassName="font-[800]" href="/staking">
+                  <span className="text-white text-[21px] font-[400]">Staking Pools</span>
+                </ActiveLink>
+              </div>
             </div>
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800]" href="/launchpad">
-                <span className="text-white text-[21px] font-[400]">Launchpad</span>
-              </ActiveLink>
-            </div>
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800]" href="/staking">
-                <span className="text-white text-[21px] font-[400]">Staking Pools</span>
-              </ActiveLink>
-            </div>
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800]" href="/multisig">
-                <span className="text-white text-[21px] font-[400]">Multi-Signature</span>
-              </ActiveLink>
-            </div>
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800]" href="/bridge">
-                <span className="text-white text-[21px] font-[400]">Bridge</span>
-              </ActiveLink>
-            </div>
-          </div>
-          <div className="flex justify-center items-center gap-2">
-            {!active ? (
-              <button
-                onClick={() => setShowProviderModal(true)}
-                className="hidden md:flex justify-center items-center bg-[#1673b9]/30 py-[9px] px-[10px] rounded-[11px] text-[18px] text-white"
-              >
-                <FaWallet /> <span className="text-white text-[18px] ml-[2px]">Connect Wallet</span>
-              </button>
-            ) : (
-              <div className="flex justify-center items-center gap-2 flex-1">
-                <div className="dropdown dropdown-hover">
-                  <button
-                    tabIndex={0}
-                    className="hidden md:flex justify-center items-center bg-[#000]/40 py-[9px] px-[10px] rounded-[25px] text-[18px] text-white gap-2"
-                  >
-                    <div className="avatar">
-                      <div className="w-8 rounded-full">
-                        <img src={selectedChain.logoURI} alt={selectedChain.symbol} />
+            <div className="flex justify-center items-center gap-2">
+              {!active ? (
+                <button
+                  onClick={() => setShowProviderModal(true)}
+                  className="hidden md:flex justify-center items-center bg-gradient-to-b from-transparent to-[#07807c] backdrop-blur-lg py-[10px] px-[10px] rounded-[30px] text-[18px] text-white"
+                >
+                  <FaWallet /> <span className="text-white text-[18px] ml-[5px]">Connect Wallet</span>
+                </button>
+              ) : (
+                <div className="flex justify-center items-center gap-2 flex-1">
+                  <div className="dropdown dropdown-hover">
+                    <button
+                      tabIndex={0}
+                      className="hidden md:flex justify-center items-center bg-[#000]/40 py-[9px] px-[10px] rounded-[25px] text-[18px] text-white gap-2"
+                    >
+                      <div className="avatar">
+                        <div className="w-8 rounded-full">
+                          <img src={selectedChain.logoURI} alt={selectedChain.symbol} />
+                        </div>
                       </div>
-                    </div>
-                    <span className="text-white text-[18px] ml-[2px]">{selectedChain.name}</span> <FiChevronDown />
-                  </button>
-                  <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.5] w-80 rounded-box text-white">
-                    {_.map(Object.keys(chains), (key, index) => (
-                      <li key={index}>
-                        <a className="gap-2" onClick={() => switchChain(hexValue(parseInt(key)), chains)}>
-                          <div className="avatar">
-                            <div className="w-8 rounded-full">
-                              <img src={chains[key as keyof typeof chains].logoURI} alt={chains[key as keyof typeof chains].symbol} />
+                      <span className="text-white text-[18px] ml-[2px]">{selectedChain.name}</span> <FiChevronDown />
+                    </button>
+                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.5] w-80 rounded-box text-white">
+                      {_.map(Object.keys(chains), (key, index) => (
+                        <li key={index}>
+                          <a className="gap-2" onClick={() => switchChain(hexValue(parseInt(key)), chains)}>
+                            <div className="avatar">
+                              <div className="w-8 rounded-full">
+                                <img src={chains[key as keyof typeof chains].logoURI} alt={chains[key as keyof typeof chains].symbol} />
+                              </div>
                             </div>
-                          </div>
-                          {chains[key as keyof typeof chains].name}
+                            {chains[key as keyof typeof chains].name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="dropdown dropdown-hover">
+                    <button
+                      tabIndex={0}
+                      className="hidden md:flex justify-center items-center bg-gradient-to-b from-transparent to-[#07807c] backdrop-blur-lg py-[9px] px-[10px] rounded-[8px] text-[18px] text-white gap-2"
+                    >
+                      <div className="h-[30px] w-[30px] rounded-[25px] flex justify-center items-center border border-white">
+                        <FaWallet />
+                      </div>{' '}
+                      <span className="text-white text-[18px] ml-[2px]">{formatEthAddress(account as string, 4)}</span> <FiChevronDown />
+                    </button>
+                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.6] rounded-box w-52 text-white">
+                      <li>
+                        <a onClick={disconnectWallet} className="btn btn-ghost gap-2">
+                          {' '}
+                          <FiLogOut /> Disconnect
                         </a>
                       </li>
-                    ))}
-                  </ul>
+                    </ul>
+                  </div>
                 </div>
-                <div className="dropdown dropdown-hover">
-                  <button
-                    tabIndex={0}
-                    className="hidden md:flex justify-center items-center bg-[#1673b9]/30 py-[9px] px-[10px] rounded-[25px] text-[18px] text-white gap-2"
-                  >
-                    <div className="h-[30px] w-[30px] rounded-[25px] flex justify-center items-center border border-white">
-                      <FaWallet />
-                    </div>{' '}
-                    <span className="text-white text-[18px] ml-[2px]">{formatEthAddress(account as string, 4)}</span> <FiChevronDown />
-                  </button>
-                  <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.6] rounded-box w-52 text-white">
-                    <li>
-                      <a onClick={disconnectWallet} className="btn btn-ghost gap-2">
-                        {' '}
-                        <FiLogOut /> Disconnect
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            )}
-            <button
-              className="md:hidden flex justify-center items-center bg-[#1673b9] py-[9px] px-[10px] rounded-[5px] text-[18px] text-white"
-              onClick={() => setShowMobileSidebar((val) => !val)}
-            >
-              {!showMobileSidebar ? <RiMenu4Fill /> : <FiX />}
-            </button>
-            {active && (
-              <button onClick={reload} className="btn btn-ghost btn-square text-white text-[30px]">
-                <IoMdRefresh />
+              )}
+              <button
+                className="md:hidden flex justify-center items-center bg-[#1673b9] py-[9px] px-[10px] rounded-[5px] text-[18px] text-white"
+                onClick={() => setShowMobileSidebar((val) => !val)}
+              >
+                {!showMobileSidebar ? <RiMenu4Fill /> : <FiX />}
               </button>
-            )}
+              {active && (
+                <button onClick={reload} className="btn btn-ghost btn-square text-white text-[30px]">
+                  <IoMdRefresh />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -216,7 +213,7 @@ export default function Header() {
         {!active ? (
           <button
             onClick={() => setShowProviderModal(true)}
-            className="md:hidden flex justify-center items-center bg-[#1673b9] py-[9px] px-[10px] rounded-[5px] text-[18px] text-white"
+            className="md:hidden flex justify-center items-center bg-[#1673b9] py-[10px] px-[10px] rounded-[15px] text-[18px] text-white"
           >
             <FaWallet />
           </button>
