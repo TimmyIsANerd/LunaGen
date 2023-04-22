@@ -6,7 +6,7 @@ export default function Bridge() {
   return (
     <>
       <Head>
-        <title>Vefi DApps | Bridge</title>
+        <title>LunaGens DeFi | Bridge</title>
       </Head>
       <div className="flex justify-center items-center w-full my-[100px]">
         <div className="flex flex-col-reverse justify-center items-center gap-6">

@@ -42,7 +42,7 @@ export default function Staking() {
   return (
     <>
       <Head>
-        <title>Vefi DApps | Stake</title>
+        <title>LunaGens DeFi | Stake</title>
       </Head>
       <div className="flex-1 h-screen flex-col gap-12 w-full backdrop-opacity-10 backdrop-invert px-[2px] py-[12px] md:px-[82px] md:py-[44px] justify-start items-center overflow-auto hidden-scrollbar">
         <div className="flex flex-col md:flex-row justify-center items-center w-full gap-4 overflow-auto hidden-scrollbar">
