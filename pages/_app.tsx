@@ -6,7 +6,6 @@ import { Web3ReactProvider } from '@web3-react/core';
 import Web3 from 'web3';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { DEXSettingsContextProvider } from '../contexts/dex/settings';
 import { Web3ContextProvider } from '../contexts/web3';
 import { APIContextProvider } from '../contexts/api';
@@ -17,10 +16,9 @@ function getLibrary(provider: any) {
 
 const AppContent = ({ children }: any) => {
   return (
-    <div className="bg-[#000] h-screen scroll-smooth flex flex-col w-screen overflow-hidden">
+    <div className="bg-[#063230] h-screen scroll-smooth flex flex-col w-screen overflow-hidden">
       <Header />
-      <div className="overflow-auto flex-1 backdrop-opacity-10 backdrop-invert bg-[#05325B]/30">{children}</div>
-      <Footer />
+      <div className="overflow-auto flex-1 backdrop-opacity-10 backdrop-invert bg-[#063230]">{children}</div>
     </div>
   );
 };
