@@ -17,11 +17,11 @@ export default class CustomDocument extends Document {
           <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Syne&display=swap" rel="stylesheet" />
           <link rel="icon" href="/images/logo/logo.ico" />
           <link rel="manifest" href="/manifest.json" />
-          <meta name="description" content="The Vefi DApps is a product of the Vefi Ecosystem that houses commonly used decentralized platforms." />
+          <meta name="description" content="The Lunagen DApps is a product of the Lunagen Ecosystem that houses commonly used decentralized platforms." />
           <meta name="robots" content="index, follow" />
           <meta
             name="keywords"
-            content="dapps, vefi, dex, launchpad, multisig, staking pools, stake, bitgert, binance, brise, bsc, omax, gatechain, multichain"
+            content="dapps, lunagen, dex, launchpad, multisig, staking pools, stake, bitgert, binance, brise, bsc, omax, gatechain, multichain"
           />
         </Head>
         <body>
