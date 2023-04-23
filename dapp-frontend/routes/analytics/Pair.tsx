@@ -48,9 +48,8 @@ enum TransactionView {
 
 const FilterBtn = ({ isActive, onClick, children }: { isActive: boolean; onClick: (event?: MouseEvent) => any; children: any }) => (
   <button
-    className={`${
-      isActive ? 'bg-[#373b4f] rounded-[6px] text-[#a6b2ec]' : 'bg-transparent text-[#cdcccc]'
-    } py-2 px-2 flex justify-center text-[0.3em] lg:text-[0.65em] font-Poppins font-[400]`}
+    className={`${isActive ? 'bg-[#373b4f] rounded-[6px] text-[#a6b2ec]' : 'bg-transparent text-[#cdcccc]'
+      } py-2 px-2 flex justify-center text-[0.3em] lg:text-[0.65em] font-Poppins font-[400]`}
     onClick={onClick}
   >
     {children}
@@ -609,8 +608,7 @@ const TransactionsList = ({ pair }: { pair: string }) => {
                   isActive={transactionView === TransactionView.ALL}
                   onClick={() =>
                     push(
-                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${
-                        TransactionView.ALL
+                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${TransactionView.ALL
                       }`
                     )
                   }
@@ -621,8 +619,7 @@ const TransactionsList = ({ pair }: { pair: string }) => {
                   isActive={transactionView === TransactionView.SWAPS}
                   onClick={() =>
                     push(
-                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${
-                        TransactionView.SWAPS
+                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${TransactionView.SWAPS
                       }`
                     )
                   }
@@ -633,8 +630,7 @@ const TransactionsList = ({ pair }: { pair: string }) => {
                   isActive={transactionView === TransactionView.ADDS}
                   onClick={() =>
                     push(
-                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${
-                        TransactionView.ADDS
+                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${TransactionView.ADDS
                       }`
                     )
                   }
@@ -645,8 +641,7 @@ const TransactionsList = ({ pair }: { pair: string }) => {
                   isActive={transactionView === TransactionView.REMOVES}
                   onClick={() =>
                     push(
-                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${
-                        TransactionView.REMOVES
+                      `${new URL(asPath, window.location.href).pathname}?view=singlePair&pair=${pair}&tab=${Tabs.TXNS}&transactionView=${TransactionView.REMOVES
                       }`
                     )
                   }
@@ -745,7 +740,7 @@ export default function PairView() {
                 </button>
               </Link>
               <Link href={`/dex?tab=swap&inputToken=${data.token0.id}&outputToken=${data.token1.id}`}>
-                <button className="capitalize font-Inter font-[500] border border-[#105dcf] text-[0.5em] lg:text-[0.85em] bg-[#105dcf] text-[#fff] rounded-[8px] lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)]">
+                <button className="capitalize font-Inter font-[500] border border-[#063230] text-[0.5em] lg:text-[0.85em] bg-[#063230] text-[#fff] rounded-[8px] lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)]">
                   trade
                 </button>
               </Link>

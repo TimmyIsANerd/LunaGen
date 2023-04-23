@@ -240,7 +240,7 @@ export default function RemoveLiquidityModal({ isVisible, onClose, pair }: IRemo
                   <button
                     disabled={value === 0 || token0LiquidityValue === 0 || token1LiquidityValue === 0 || isLoading}
                     onClick={removeLiquidity}
-                    className="flex justify-center items-center bg-[#105dcf] py-4 px-3 text-[0.95em] text-white w-full rounded-[8px] gap-3 font-Syne capitalize"
+                    className="flex justify-center items-center bg-[#063230] py-4 px-3 text-[0.95em] text-white w-full rounded-[8px] gap-3 font-Syne capitalize"
                   >
                     remove <TailSpin color="#dcdcdc" visible={isLoading} width={20} height={20} />
                   </button>

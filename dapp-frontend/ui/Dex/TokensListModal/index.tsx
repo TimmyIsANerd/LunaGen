@@ -102,12 +102,12 @@ export default function TokensListModal({ onClose, isVisible, onTokenSelected, s
 
                     <div className="flex flex-col justify-start items-start gap-3 w-full overflow-auto max-h-[26rem] py-2 px-1">
                       {searchValue.replace(/\s/g, '').length > 0 &&
-                      filter(
-                        tokensListing,
-                        (model) =>
-                          model.name.toLowerCase().startsWith(searchValue.toLowerCase()) ||
-                          model.address.toLowerCase().startsWith(searchValue.toLowerCase())
-                      ).length > 0 ? (
+                        filter(
+                          tokensListing,
+                          (model) =>
+                            model.name.toLowerCase().startsWith(searchValue.toLowerCase()) ||
+                            model.address.toLowerCase().startsWith(searchValue.toLowerCase())
+                        ).length > 0 ? (
                         filter(
                           tokensListing,
                           (model) =>
@@ -145,7 +145,7 @@ export default function TokensListModal({ onClose, isVisible, onTokenSelected, s
                             <button
                               onClick={addTokenUsingSearchValue}
                               disabled={isLoading}
-                              className={`flex justify-center items-center bg-[#105dcf] py-4 px-3 text-[0.95em] text-white w-full rounded-[8px] gap-3 capitalize font-Syne`}
+                              className={`flex justify-center items-center bg-[#063230] py-4 px-3 text-[0.95em] text-white w-full rounded-[8px] gap-3 capitalize font-Syne`}
                             >
                               import token
                               {isLoading && <TailSpin color="#dcdcdc" visible={isLoading} width={20} height={20} />}

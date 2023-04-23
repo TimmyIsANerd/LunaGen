@@ -22,9 +22,8 @@ type ViewStakeModalProps = {
 
 const StatusLabel = ({ timestamp }: { timestamp: number }) => (
   <div
-    className={`flex justify-center items-center rounded-[30px] px-1 py-1 ${
-      multiply(timestamp, 1000) > Date.now() ? 'bg-[#02c35b]/[.15] text-[#23e33e]' : 'bg-[#f63859]/10 text-[#f73859]'
-    }`}
+    className={`flex justify-center items-center rounded-[30px] px-1 py-1 ${multiply(timestamp, 1000) > Date.now() ? 'bg-[#02c35b]/[.15] text-[#23e33e]' : 'bg-[#f63859]/10 text-[#f73859]'
+      }`}
   >
     <span className="font-Syne font-[400] text-[0.72em] capitalize">{multiply(timestamp, 1000) > Date.now() ? 'live' : 'sold out'}</span>
   </div>
@@ -205,7 +204,7 @@ export default function ViewStakeModal({ isOpen, onClose, selectedStakingPoolID,
                               <button
                                 onClick={withdrawRewards}
                                 disabled={isLoading || !canWithdraw || !active}
-                                className="flex justify-center items-center bg-[#105dcf] py-4 px-3 text-[0.72em] lg:text-[0.95em] text-white w-full rounded-[8px] gap-3"
+                                className="flex justify-center items-center bg-[#063230] py-4 px-3 text-[0.72em] lg:text-[0.95em] text-white w-full rounded-[8px] gap-3"
                               >
                                 <span className="font-Syne capitalize">
                                   {!active ? 'wallet not connected' : !canWithdraw ? 'cannot withdraw now' : 'unstake'}

@@ -10,7 +10,7 @@ type StepProps = {
 export const Step = ({ isActive, label }: StepProps) => (
   <div
     className={`flex justify-center items-center lg:h-10 h-5 lg:w-10 w-5 rounded-full px-2 py-2 text-[0.5em] lg:text-[0.92em] ${
-      isActive ? 'bg-[#105dcf] border-2 border-[#fff]' : 'bg-[#373b4f]'
+      isActive ? 'bg-[#063230] border-2 border-[#fff]' : 'bg-[#373b4f]'
     } font-Poppins font-[500]`}
   >
     {label}
@@ -43,7 +43,7 @@ export const Steps = ({ activeStep = 0, children }: StepsProps) => {
             {index < childrenArray.length - 1 && (
               <div
                 className={`flex h-[2px] ${
-                  index === activeStep ? 'border-b border-dashed border-[#3878d7] bg-transparent' : 'bg-[#808080]'
+                  index === activeStep ? 'border-b border-dashed border-[#E6E6E6] bg-transparent' : 'bg-[#808080]'
                 } w-full float-right`}
               ></div>
             )}

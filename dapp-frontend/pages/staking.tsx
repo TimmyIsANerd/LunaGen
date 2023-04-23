@@ -41,7 +41,7 @@ export default function Staking() {
   return (
     <>
       <Head>
-        <title>Vefi DApps | Stake</title>
+        <title>Lunagens DeFi Staking | Stake</title>
       </Head>
       <div className="flex container mx-auto flex-col justify-center items-start gap-12 px-8 lg:px-10 py-4">
         <div className="flex flex-col lg:flex-row justify-start items-center lg:justify-between lg:items-center gap-2 w-full">
@@ -53,7 +53,7 @@ export default function Staking() {
           </div>
           <button
             onClick={() => setShowCreatePoolModal(true)}
-            className="capitalize font-Inter font-[500] border border-[#105dcf] text-[0.72em] lg:text-[0.85em] bg-[#105dcf] text-[#fff] rounded-[8px] lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)]"
+            className="capitalize font-Inter font-[500] border bg-gradient-to-br from-gray-800 to-teal-900 text-[#fff] rounded-[8px] lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)]"
           >
             create new pool
           </button>

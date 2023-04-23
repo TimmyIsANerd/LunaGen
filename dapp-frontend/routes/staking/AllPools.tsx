@@ -20,7 +20,7 @@ enum SubRoutes {
 const FilterBtn = ({ isActive, onClick, children }: { isActive: boolean; onClick: (event?: MouseEvent) => any; children: any }) => (
   <button
     className={`${
-      isActive ? 'bg-[#373b4f] rounded-[6px] text-[#a6b2ec]' : 'bg-transparent text-[#cdcccc]'
+      isActive ? 'bg-[#E6E6E6] rounded-[6px] text-[#063230]' : 'bg-transparent text-[#cdcccc]'
     } py-2 px-2 flex justify-center text-[0.3em] lg:text-[0.65em] font-Poppins font-[400]`}
     onClick={onClick}
   >

@@ -35,7 +35,7 @@ export default function Dex() {
   return (
     <>
       <Head>
-        <title>Vefi DApps | DEX</title>
+        <title>Lunagens DeFi Staking | DEX</title>
       </Head>
       <div className="flex justify-center items-center py-12 w-full">
         <div className="flex justify-center items-center rounded-[30px] bg-[#fff]/[.11] py-1 px-1">

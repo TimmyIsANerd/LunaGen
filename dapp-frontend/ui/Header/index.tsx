@@ -78,7 +78,7 @@ export default function Header() {
           </div>
         </div>
       )}
-      <div className="bg-[#0f0f10]/[.08] w-full bg-opacity-90 shadow-lg font-Syne">
+      <div className="bg-[#063230]/[.08] w-full bg-opacity-90 shadow-lg font-Syne">
         <div className="flex flex-row justify-between px-[38px] py-[16px] items-center w-full">
           <div className="flex justify-center items-center cursor-pointer">
             <div>
@@ -94,12 +94,12 @@ export default function Header() {
                 </ActiveLink>
               </div>
               {/* <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/analytics">
+              <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="/analytics">
                 <span className="text-white text-[1em] font-[400]">Analytics</span>
               </ActiveLink>
             </div> */}
               {/* <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/launchpad">
+              <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="/launchpad">
                 <span className="text-white text-[1em] font-[400]">Launchpad</span>
               </ActiveLink>
             </div> */}
@@ -109,12 +109,12 @@ export default function Header() {
                 </ActiveLink>
               </div>
               {/* <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/multisig">
+              <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="/multisig">
                 <span className="text-white text-[1em] font-[400]">Multi-Signature</span>
               </ActiveLink>
             </div>
             <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/bridge">
+              <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="/bridge">
                 <span className="text-white text-[1em] font-[400]">Bridge</span>
               </ActiveLink>
             </div> */}
