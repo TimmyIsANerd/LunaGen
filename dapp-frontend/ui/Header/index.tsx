@@ -57,10 +57,11 @@ export default function Header() {
   const { active, account, error: web3Error, disconnectWallet } = useWeb3Context();
   const selectedChain = useCurrentChain();
   const [showChainSwitchModal, setShowChainSwitchModal] = useState<boolean>(false);
+  const { push } = useRouter();
 
-  function LogoCaption(){
+  function LogoCaption() {
     return (
-      <div className='flex flex-row items-center'>
+      <div className='flex flex-row items-center' onClick={() => push('/')}>
         <Image src="/images/logo/lunagen.svg" alt="lunagen_logo" width={80} height={40} />
         <p className='font-bold text-[0.8rem] md-text-[1rem]'>LunaGens DeFi Staking</p>
       </div>
@@ -80,15 +81,15 @@ export default function Header() {
       <div className="bg-[#0f0f10]/[.08] w-full bg-opacity-90 shadow-lg font-Syne">
         <div className="flex flex-row justify-between px-[38px] py-[16px] items-center w-full">
           <div className="flex justify-center items-center cursor-pointer">
-            <Link href="/">
+            <div>
               <LogoCaption />
-            </Link>
+            </div>
           </div>
-          
+
           <div className='flex items-center flex-row'>
             <div className="md:flex flex-row justify-center items-center hidden w-auto gap-3">
               <div className="px-[23px] cursor-pointer">
-                <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/dex">
+                <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="https://www.lunagens.com/">
                   <span className="text-white text-[1em] font-[400]">Swap</span>
                 </ActiveLink>
               </div>
@@ -103,7 +104,7 @@ export default function Header() {
               </ActiveLink>
             </div> */}
               <div className="px-[23px] cursor-pointer">
-                <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/staking">
+                <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="/staking">
                   <span className="text-white text-[1em] font-[400]">Staking Pools</span>
                 </ActiveLink>
               </div>
@@ -136,7 +137,7 @@ export default function Header() {
                   <button
                     tabIndex={0}
                     onClick={() => !active && setShowProviderModal(true)}
-                    className="hidden lg:flex justify-center items-center bg-[#105dcf] py-[9px] px-[10px] text-[1em] text-white gap-2 rounded-[8px]"
+                    className="hidden lg:flex justify-center items-center bg-[#063230] py-[13px] px-[10px] text-[1em] text-white gap-2 rounded-[8px]"
                   >
                     {active ? (
                       <>
@@ -178,7 +179,7 @@ export default function Header() {
                 )}
                 <button
                   onClick={() => (!active ? setShowProviderModal(true) : disconnectWallet())}
-                  className="flex justify-center items-center bg-[#105dcf] py-2 px-4 text-[0.52em] text-white gap-2 rounded-[8px]"
+                  className="flex justify-center items-center bg-[#063230] py-2 px-4 text-[0.52em] text-white gap-2 rounded-[8px]"
                 >
                   {active ? (
                     <>{formatEthAddress(account as string, 4)}</>
@@ -213,14 +214,14 @@ export default function Header() {
         >
           <li>
             <ActiveLink activeClassName="active" href="/dex">
-              <span className="capitalize">trade</span>
+              <span className="capitalize">Trade</span>
             </ActiveLink>
           </li>
-          <li>
+          {/* <li>
             <ActiveLink activeClassName="active" href="/analytics">
               <span className="capitalize">analytics</span>
             </ActiveLink>
-          </li>
+          </li> */}
           <li>
             <ActiveLink activeClassName="active" href="/staking">
               <span className="capitalize">staking pools</span>
