@@ -57,6 +57,16 @@ export default function Header() {
   const { active, account, error: web3Error, disconnectWallet } = useWeb3Context();
   const selectedChain = useCurrentChain();
   const [showChainSwitchModal, setShowChainSwitchModal] = useState<boolean>(false);
+
+  function LogoCaption(){
+    return (
+      <div className='flex flex-row items-center'>
+        <Image src="/images/logo/lunagen.svg" alt="lunagen_logo" width={80} height={40} />
+        <p className='font-bold text-[0.8rem] md-text-[1rem]'>LunaGens DeFi Staking</p>
+      </div>
+    )
+  }
+
   return (
     <>
       {web3Error && (
@@ -67,35 +77,37 @@ export default function Header() {
           </div>
         </div>
       )}
-      <div className="bg-[#0f0f10]/[.08] lg:border-b border-[#5e5e5e] w-full font-Syne">
+      <div className="bg-[#0f0f10]/[.08] w-full bg-opacity-90 shadow-lg font-Syne">
         <div className="flex flex-row justify-between px-[38px] py-[16px] items-center w-full">
           <div className="flex justify-center items-center cursor-pointer">
             <Link href="/">
-              <Image src="/images/vefi.svg" alt="vefi_logo" width={80} height={40} />
+              <LogoCaption />
             </Link>
           </div>
-          <div className="md:flex flex-row justify-center items-center hidden w-auto gap-3">
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/dex">
-                <span className="text-white text-[1em] font-[400]">Trade</span>
-              </ActiveLink>
-            </div>
-            <div className="px-[23px] cursor-pointer">
+          
+          <div className='flex items-center flex-row'>
+            <div className="md:flex flex-row justify-center items-center hidden w-auto gap-3">
+              <div className="px-[23px] cursor-pointer">
+                <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/dex">
+                  <span className="text-white text-[1em] font-[400]">Swap</span>
+                </ActiveLink>
+              </div>
+              {/* <div className="px-[23px] cursor-pointer">
               <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/analytics">
                 <span className="text-white text-[1em] font-[400]">Analytics</span>
               </ActiveLink>
-            </div>
-            {/* <div className="px-[23px] cursor-pointer">
+            </div> */}
+              {/* <div className="px-[23px] cursor-pointer">
               <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/launchpad">
                 <span className="text-white text-[1em] font-[400]">Launchpad</span>
               </ActiveLink>
             </div> */}
-            <div className="px-[23px] cursor-pointer">
-              <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/staking">
-                <span className="text-white text-[1em] font-[400]">Staking Pools</span>
-              </ActiveLink>
-            </div>
-            {/* <div className="px-[23px] cursor-pointer">
+              <div className="px-[23px] cursor-pointer">
+                <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/staking">
+                  <span className="text-white text-[1em] font-[400]">Staking Pools</span>
+                </ActiveLink>
+              </div>
+              {/* <div className="px-[23px] cursor-pointer">
               <ActiveLink activeClassName="font-[800] border-b-2 border-[#105dcf]" href="/multisig">
                 <span className="text-white text-[1em] font-[400]">Multi-Signature</span>
               </ActiveLink>
@@ -105,83 +117,84 @@ export default function Header() {
                 <span className="text-white text-[1em] font-[400]">Bridge</span>
               </ActiveLink>
             </div> */}
-          </div>
-          <div className="flex justify-center items-center gap-2">
-            <div className="flex justify-center items-center gap-2 flex-1">
-              <button
-                onClick={() => setShowChainSwitchModal(true)}
-                className="hidden md:flex justify-center items-center bg-[#fff]/[.09] py-[9px] px-[10px] rounded-[8px] text-[1em] text-white gap-2"
-              >
-                <div className="avatar">
-                  <div className="w-8 rounded-full">
-                    <img src={selectedChain.logoURI} alt={selectedChain.symbol} />
-                  </div>
-                </div>
-                {selectedChain.name} <FiChevronDown />
-              </button>
-
-              <div className="dropdown dropdown-hover">
-                <button
-                  tabIndex={0}
-                  onClick={() => !active && setShowProviderModal(true)}
-                  className="hidden lg:flex justify-center items-center bg-[#105dcf] py-[9px] px-[10px] text-[1em] text-white gap-2 rounded-[8px]"
-                >
-                  {active ? (
-                    <>
-                      <div className="h-[30px] w-[30px] rounded-[25px] flex justify-center items-center border border-white">
-                        <FaWallet />
-                      </div>{' '}
-                      {formatEthAddress(account as string, 4)} <FiChevronDown />
-                    </>
-                  ) : (
-                    <div className="flex justify-center items-center gap-2">
-                      <FaWallet /> Connect Wallet
-                    </div>
-                  )}
-                </button>
-                {active && (
-                  <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.6] rounded-box w-52 text-white">
-                    <li>
-                      <a onClick={disconnectWallet} className="btn btn-ghost gap-2">
-                        {' '}
-                        <FiLogOut /> Disconnect
-                      </a>
-                    </li>
-                  </ul>
-                )}
-              </div>
             </div>
-            <div className="lg:hidden flex justify-center items-center gap-2">
-              {active && (
+            <div className="flex justify-center items-center gap-2">
+              <div className="flex justify-center items-center gap-2 flex-1">
                 <button
                   onClick={() => setShowChainSwitchModal(true)}
-                  className="flex justify-center items-center btn btn-sm btn-ghost btn-square py-2 px-3 rounded-[5px] text-[18px] text-white"
+                  className="hidden md:flex justify-center items-center bg-[#fff]/[.09] py-[9px] px-[10px] rounded-[8px] text-[1em] text-white gap-2"
                 >
                   <div className="avatar">
-                    <div className="w-4 rounded-full">
+                    <div className="w-8 rounded-full">
                       <img src={selectedChain.logoURI} alt={selectedChain.symbol} />
                     </div>
                   </div>
+                  {selectedChain.name} <FiChevronDown />
                 </button>
-              )}
-              <button
-                onClick={() => (!active ? setShowProviderModal(true) : disconnectWallet())}
-                className="flex justify-center items-center bg-[#105dcf] py-2 px-4 text-[0.52em] text-white gap-2 rounded-[8px]"
-              >
-                {active ? (
-                  <>{formatEthAddress(account as string, 4)}</>
-                ) : (
-                  <div className="flex justify-center items-center gap-2 capitalize">
-                    <FaWallet /> connect wallet
-                  </div>
+
+                <div className="dropdown dropdown-hover">
+                  <button
+                    tabIndex={0}
+                    onClick={() => !active && setShowProviderModal(true)}
+                    className="hidden lg:flex justify-center items-center bg-[#105dcf] py-[9px] px-[10px] text-[1em] text-white gap-2 rounded-[8px]"
+                  >
+                    {active ? (
+                      <>
+                        <div className="h-[30px] w-[30px] rounded-[25px] flex justify-center items-center border border-white">
+                          <FaWallet />
+                        </div>{' '}
+                        {formatEthAddress(account as string, 4)} <FiChevronDown />
+                      </>
+                    ) : (
+                      <div className="flex justify-center items-center gap-2">
+                        <FaWallet /> Connect Wallet
+                      </div>
+                    )}
+                  </button>
+                  {active && (
+                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-[#000]/[0.6] rounded-box w-52 text-white">
+                      <li>
+                        <a onClick={disconnectWallet} className="btn btn-ghost gap-2">
+                          {' '}
+                          <FiLogOut /> Disconnect
+                        </a>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              </div>
+              <div className="lg:hidden flex justify-center items-center gap-2">
+                {active && (
+                  <button
+                    onClick={() => setShowChainSwitchModal(true)}
+                    className="flex justify-center items-center btn btn-sm btn-ghost btn-square py-2 px-3 rounded-[5px] text-[18px] text-white"
+                  >
+                    <div className="avatar">
+                      <div className="w-4 rounded-full">
+                        <img src={selectedChain.logoURI} alt={selectedChain.symbol} />
+                      </div>
+                    </div>
+                  </button>
                 )}
-              </button>
-              <button
-                className="flex justify-center items-center bg-transparent py-[9px] px-[10px] rounded-[5px] text-[1.6em] text-white"
-                onClick={() => setShowMobileSidebar((val) => !val)}
-              >
-                {!showMobileSidebar ? <RiMenu4Fill /> : <FiX />}
-              </button>
+                <button
+                  onClick={() => (!active ? setShowProviderModal(true) : disconnectWallet())}
+                  className="flex justify-center items-center bg-[#105dcf] py-2 px-4 text-[0.52em] text-white gap-2 rounded-[8px]"
+                >
+                  {active ? (
+                    <>{formatEthAddress(account as string, 4)}</>
+                  ) : (
+                    <div className="flex justify-center items-center gap-2 capitalize">
+                      <FaWallet /> connect wallet
+                    </div>
+                  )}
+                </button>
+                <button
+                  className="flex justify-center items-center bg-transparent py-[9px] px-[10px] rounded-[5px] text-[1.6em] text-white"
+                  onClick={() => setShowMobileSidebar((val) => !val)}
+                >
+                  {!showMobileSidebar ? <RiMenu4Fill /> : <FiX />}
+                </button>
+              </div>
             </div>
           </div>
         </div>
