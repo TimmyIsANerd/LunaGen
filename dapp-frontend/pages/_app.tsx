@@ -7,7 +7,6 @@ import { Web3ReactProvider } from '@web3-react/core';
 import Web3 from 'web3';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
 import Header from '../ui/Header';
-import Footer from '../ui/Footer';
 import { DEXSettingsContextProvider } from '../contexts/dex/settings';
 import { Web3ContextProvider } from '../contexts/web3';
 import { GQLProvider } from '../contexts/graphql';

@@ -1,18 +1,8 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { FiCheckCircle } from 'react-icons/fi';
-import { MdSwapHoriz } from 'react-icons/md';
 import { useRouter } from 'next/router';
-import { map } from 'lodash';
-import chains from '../assets/chains.json';
-import { useStakingPoolFactoriesStats } from '../hooks/staking';
-import millify from 'millify';
-import { useQuasarFactoriesStats } from '../hooks/analytics';
 import Image from 'next/image';
 
 export default function Index() {
-  const stakingPoolStats = useStakingPoolFactoriesStats();
-  const { data: dexFactoryData } = useQuasarFactoriesStats();
   const { push } = useRouter();
 
   const Button = ({ href, children }: any) => {
