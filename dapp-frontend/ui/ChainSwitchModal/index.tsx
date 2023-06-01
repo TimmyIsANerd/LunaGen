@@ -42,7 +42,7 @@ export default function ChainSwitchModal({ isOpen = false, onClose }: ChainSwitc
                     </div>
                   </div>
                   <ul tabIndex={0} className="menu p-2 bg-transparent w-full text-white font-Syne overflow-auto">
-                    {map(Object.keys(chains), (key: keyof typeof chains, index) => (
+                    {map(Object.keys(chains), (key: keyof typeof chains, index:number) => (
                       <li key={index}>
                         <a className="gap-2 text-[1em]" onClick={() => switchChain(hexValue(parseInt(key)))}>
                           <div className="avatar">
