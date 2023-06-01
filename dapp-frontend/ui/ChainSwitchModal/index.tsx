@@ -13,6 +13,12 @@ type ChainSwitchModalProps = {
 
 export default function ChainSwitchModal({ isOpen = false, onClose }: ChainSwitchModalProps) {
   const { switchChain } = useWeb3Context();
+
+  const switchChainFunction = (key: keyof typeof chains) =>{
+    switchChain(hexValue(parseInt(key)))
+    onClose()
+  }
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -42,9 +48,9 @@ export default function ChainSwitchModal({ isOpen = false, onClose }: ChainSwitc
                     </div>
                   </div>
                   <ul tabIndex={0} className="menu p-2 bg-transparent w-full text-white font-Syne overflow-auto">
-                    {map(Object.keys(chains), (key: keyof typeof chains, index:number) => (
+                    {map(Object.keys(chains), (key: keyof typeof chains, index: number) => (
                       <li key={index}>
-                        <a className="gap-2 text-[1em]" onClick={() => switchChain(hexValue(parseInt(key)))}>
+                        <a className="gap-2 text-[1em]" onClick={() => switchChainFunction(key)}>
                           <div className="avatar">
                             <div className="w-8 rounded-full">
                               <img src={chains[key].logoURI} alt={chains[key].symbol} />
