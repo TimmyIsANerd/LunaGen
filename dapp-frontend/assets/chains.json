@@ -7,7 +7,7 @@
     "explorer": "https://testnet.bscscan.com"
   },
   "32520": {
-    "rpcUrl": "https://nodes.vefinetwork.org/bitgert",
+    "rpcUrl": "https://mainnet-rpc.brisescan.com",
     "name": "Bitgert Mainnet",
     "logoURI": "/images/bitgert.webp",
     "symbol": "BRISE",
