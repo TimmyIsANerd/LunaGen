@@ -89,7 +89,7 @@ export default function Header() {
           <div className='flex items-center flex-row'>
             <div className="md:flex flex-row justify-center items-center hidden w-auto gap-3">
               <div className="px-[23px] cursor-pointer">
-                <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="https://www.lunagens.com/">
+                <ActiveLink activeClassName="font-[800] border-b-2 border-[#063230]" href="/dex">
                   <span className="text-white text-[1em] font-[400]">Swap</span>
                 </ActiveLink>
               </div>
