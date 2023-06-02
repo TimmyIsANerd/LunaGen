@@ -17,7 +17,7 @@ export default function Index() {
       <Head>
         <title>Lunagens DeFi Staking | Homepage</title>
       </Head>
-      <div className="w-full min-h-full flex md:flex-row flex-col justify-center items-center">
+      <div className="w-full min-h-full flex md:flex-row flex-col justify-center items-center p-1">
         <div className='space-y-5'>
           <div className='text-white space-y-5'>
             <h2 className='font-bold md:text-[3rem] text-[2rem] leading-[3.5rem]'>Just stake some<br /> tokens to earn</h2>
