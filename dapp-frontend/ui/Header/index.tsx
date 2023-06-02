@@ -63,7 +63,7 @@ export default function Header() {
     return (
       <div className='flex flex-row items-center' onClick={() => push('/')}>
         <Image src="/images/logo/lunagen.svg" alt="lunagen_logo" width={80} height={40} />
-        <p className='font-bold text-[0.8rem] md-text-[1rem]'>LunaGens DeFi Staking</p>
+        <p className='font-bold text-[0.8rem] md-text-[1rem] hidden md:block'>LunaGens DeFi Staking</p>
       </div>
     )
   }
