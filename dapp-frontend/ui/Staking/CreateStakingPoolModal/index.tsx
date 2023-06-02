@@ -6,7 +6,7 @@ import { Step, Steps } from '../../Steps';
 import { add, ceil, map, multiply, toString } from 'lodash';
 import poolActions from '../../../assets/pool_actions.json';
 import { useContract } from '../../../hooks/global';
-import { abi as poolActionABI } from 'vefi-token-launchpad-staking/artifacts/contracts/StakingPoolActions.sol/StakingPoolActions.json';
+import { abi as poolActionABI } from '../../../abi/StakingPoolActions.json';
 import { abi as erc20ABI } from 'vefi-token-launchpad-staking/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import { isAddress } from '@ethersproject/address';
 import { parseEther, parseUnits } from '@ethersproject/units';
@@ -36,8 +36,8 @@ export default function CreateStakingPoolModal({ isOpen, onClose }: CreateStakin
   const [activeStep, setActiveStep] = useState<number>(0);
   const [selectedInterval, setSelectedInterval] = useState<TimeIntervals>(TimeIntervals.DAYS);
   const [poolCreationData, setPoolCreationData] = useState({
-    stakeTokenAddress: AddressZero,
-    rewardTokenAddress: AddressZero,
+    stakeTokenAddress: "",
+    rewardTokenAddress: "",
     apy: 0,
     tax: 0,
     taxRecipient: AddressZero,
@@ -143,7 +143,8 @@ export default function CreateStakingPoolModal({ isOpen, onClose }: CreateStakin
             value:
               poolCreationData.rewardTokenAddress !== AddressZero
                 ? hexValue(deploymentFee)
-                : hexValue(deploymentFee.add(parseEther(poolCreationData.initialAmount.toString())))
+                : hexValue(deploymentFee.add(parseEther(poolCreationData.initialAmount.toString()))),
+                gasLimit: 500000,
           }
         );
 
@@ -257,7 +258,7 @@ export default function CreateStakingPoolModal({ isOpen, onClose }: CreateStakin
                           <button
                             onClick={submit}
                             disabled={isLoading || !isSubmittable}
-                            className="capitalize font-Inter font-[500] border border-[#063230] text-[0.5em] lg:text-[0.85em] bg-[#063230] text-[#fff] rounded-[8px] lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)] flex justify-center items-center gap-2"
+                            className="capitalize font-Inter font-[500] border border-[#E6E6E6] text-[0.5em] lg:text-[0.85em] bg-[#063230] text-[#fff] rounded-[8px] lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)] flex justify-center items-center gap-2"
                           >
                             submit {isLoading && <TailSpin color="#E6E6E6" visible={isLoading} width={20} height={20} />}
                           </button>
@@ -268,7 +269,7 @@ export default function CreateStakingPoolModal({ isOpen, onClose }: CreateStakin
                                 onClick={() => {
                                   if (activeStep < 2) setActiveStep((step) => step + 1);
                                 }}
-                                  className="capitalize font-Inter font-[500] border bg-gradient-to-br from-gray-800 to-teal-900 rounded-[8px] text-[0.5em] lg:text-[0.85em]  text-[#E6E6E6]  lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)]"
+                                className="capitalize font-Inter font-[500] border bg-gradient-to-br from-gray-800 to-teal-900 rounded-[8px] text-[0.5em] lg:text-[0.85em]  text-[#E6E6E6]  lg:px-4 px-1 lg:py-2 py-1 shadow-[0_1px_2px_rgba(16,_24,_40,_0.05)]"
                               >
                                 next
                               </button>

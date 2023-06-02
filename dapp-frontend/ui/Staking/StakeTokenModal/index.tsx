@@ -7,7 +7,7 @@ import Toast from '../../Toast';
 import { AddressZero } from '@ethersproject/constants';
 import millify from 'millify';
 import { TailSpin } from 'react-loader-spinner';
-import { abi as stakingPoolABI } from 'vefi-token-launchpad-staking/artifacts/contracts/StakingPool.sol/StakingPool.json';
+import { abi as stakingPoolABI } from '../../../abi/StakingPool.json';
 import { abi as erc20ABI } from 'vefi-token-launchpad-staking/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import { useContract } from '../../../hooks/global';
 import { useSingleStakingPool } from '../../../hooks/staking';

@@ -3,7 +3,7 @@ import { gql } from 'graphql-request';
 import { floor, head } from 'lodash';
 import { useGQLContext } from '../../contexts/graphql';
 import { useWeb3Context } from '../../contexts/web3';
-import { abi as stakingPoolABI } from 'vefi-token-launchpad-staking/artifacts/contracts/StakingPool.sol/StakingPool.json';
+import { abi as stakingPoolABI } from '../../abi/StakingPool.json';
 import { abi as erc20ABI } from 'vefi-token-launchpad-staking/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 import { useContract } from '../global';
 import { Contract } from '@ethersproject/contracts';
